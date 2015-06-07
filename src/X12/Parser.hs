@@ -2,9 +2,10 @@
 -- | Parser for ANSI X12 EDI Data Format
 
 module X12.Parser where
-import Data.Text hiding (count)
+import Prelude hiding (concat, takeWhile)
+import Data.Text (Text, pack)
 import Data.Attoparsec.Text
-import Control.Applicative
+import Control.Applicative ((<$>), (<|>), (<*>), (<*), (*>), many)
 
 type Element = Text
 
@@ -22,8 +23,15 @@ segmentIdParser = do
   sid <- count 3 (letter <|> digit)
   return $ pack sid
 
+
+element :: Parser Element
+element = takeWhile (/= sepChar)
+
+elementList :: Parser [Element]
+elementList = element `sepBy` char sepChar
+
 segmentParser :: Parser [Element]
 segmentParser = do
   sid <- segmentIdParser
-  char sepChar
-  return [sid]
+  elems <- elementList
+  return $ sid : elems
