@@ -31,25 +31,19 @@ terminChar = '\n'
 isaParser :: Parser Segment
 isaParser = do
   sid <- string "ISA"
-  sepChar <- anyChar
+  sep <- anyChar
   elems <- elementList
   return $ sid : elems
 
-segmentIdParser :: Parser Element
-segmentIdParser = do
-  sid <- element
-  return $ sid
-
-element :: Parser Element
-element = takeWhile (`notElem` [sepChar, terminChar])
+element :: Char -> Parser Element
+element sep = takeWhile (`notElem` [sep, terminChar])
 
 elementList :: Parser [Element]
-elementList = sepBy element $ char sepChar
+elementList = sepBy (element sepChar) $ char sepChar
 
 segmentParser :: Parser [Element]
 segmentParser = do
-  isa <- isaParser
-  sid <- segmentIdParser
+  sid <- element sepChar
   char sepChar
   elems <- elementList
-  return $ isa ++ (sid : elems)
+  return $ sid : elems
