@@ -5,7 +5,7 @@ name:                xtwelve
 version:             0.1.0.0
 synopsis:            An ANSI X12 EDI parser and generator library
 description:         ANSI X12 EDI parser/generator library
-license:             MIT
+license:             BSD3
 license-file:        LICENSE
 author:              Alex Kyllo
 maintainer:          alex.kyllo@gmail.com
@@ -16,10 +16,11 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  -- exposed-modules:
+  exposed-modules: X12.Parser
   -- other-modules:
   -- other-extensions:
-  build-depends:       base >=4.8 && <4.9,
-                       attoparsec
+  build-depends:       base >=4.8 && <4.9
+                     , attoparsec
+                     , text
   hs-source-dirs:      src
   default-language:    Haskell2010
