@@ -1,9 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
--- | 
+-- | Parser for ANSI X12 EDI Data Format
 
 module X12.Parser where
 import Data.Text hiding (count)
 import Data.Attoparsec.Text
+import Control.Applicative
 
 type Element = Text
 
@@ -18,7 +19,7 @@ sepChar = '*'
 
 segmentIdParser :: Parser Element
 segmentIdParser = do
-  sid <- count 3 letter
+  sid <- count 3 (letter <|> digit)
   return $ pack sid
 
 segmentParser :: Parser [Element]
