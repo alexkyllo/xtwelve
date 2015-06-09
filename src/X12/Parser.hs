@@ -3,13 +3,11 @@
 
 module X12.Parser where
 import Prelude hiding (concat, takeWhile, take)
-import Data.Text (Text, pack)
+import Data.Text (Text)
 import Data.Attoparsec.Text
-import Control.Applicative ((<$>), (<|>), (<*>), (<*), (*>), many)
+import Control.Applicative (many) --(<$>), (<|>), (<*>), (<*), (*>))
 
 type Element = Text
---type Segment = [Element]
-type Loop = [Segment]
 type FunctionalGroup = [Loop]
 type Interchange = [FunctionalGroup]
 
@@ -17,6 +15,13 @@ data Segment =
   Segment { segmentId :: Text
           , elements :: [Text]
           }
+  deriving Show
+
+data Loop =
+  Loop { loopId :: Text
+       , segments :: [Segment]
+       , loops :: [Loop]
+       }
   deriving Show
 
 testInterchange :: Text
