@@ -9,7 +9,10 @@ import Control.Applicative (many) --(<$>), (<|>), (<*>), (<*), (*>))
 
 type Element = Text
 type FunctionalGroup = [Loop]
-type Interchange = [FunctionalGroup]
+data Interchange =
+  Interchange { interchangeId :: Text
+              }
+  deriving Show
 
 data Segment =
   Segment { segmentId :: Text
@@ -20,8 +23,11 @@ data Segment =
 data Loop =
   Loop { loopId :: Text
        , segments :: [Segment]
-       , loops :: [Loop]
        }
+  deriving Show
+
+data S850 = S850 { st :: FunctionalGroup
+             }
   deriving Show
 
 testInterchange :: Text
