@@ -4,14 +4,39 @@
 module X12.Parser where
 import Prelude hiding (concat, takeWhile, take)
 import Data.Text (Text)
+import Data.Time.Calendar (Day)
+import Data.Time.LocalTime (TimeOfDay)
+import Data.Time.Format
 import Data.Attoparsec.Text
 import Control.Applicative (many) --(<$>), (<|>), (<*>), (<*), (*>))
 
 type Element = Text
-type FunctionalGroup = [Loop]
+type Identifier = Text
+type FunctionalGroup = [TransactionSet]
+
+data Value = Text | Day | TimeOfDay | Integer | Float | Identifier
+
 data Interchange =
   Interchange { interchangeId :: Text
+              , interchangeSegment :: Segment
+              , functionalGroups :: [FunctionalGroup]
               }
+  deriving Show
+
+data TransactionSet =
+  TransactionSet { transactionSetId :: Text
+                 , tables :: [Table]
+                 }
+  deriving Show
+
+data TableType = Header | Detail | Summary
+               deriving Show
+
+data Table =
+  Table { tableType :: TableType
+        , tableLoops :: [Loop]
+        , tableSegments :: [Segment]
+        }
   deriving Show
 
 data Segment =
@@ -26,7 +51,7 @@ data Loop =
        }
   deriving Show
 
-data S850 = S850 { st :: FunctionalGroup
+data S850 = S850 {
              }
   deriving Show
 
