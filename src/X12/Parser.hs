@@ -8,7 +8,7 @@ import Data.Time.Calendar (Day)
 import Data.Time.LocalTime (TimeOfDay)
 import Data.Time.Format
 import Data.Attoparsec.Text
-import Control.Applicative (many) --(<$>), (<|>), (<*>), (<*), (*>))
+import Control.Applicative (many, (<*)) --(<$>), (<|>), (<*>), (<*), (*>))
 
 type Element = Text
 type Identifier = Text
