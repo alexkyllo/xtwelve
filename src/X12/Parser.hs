@@ -4,21 +4,47 @@
 module X12.Parser where
 import Prelude hiding (concat, takeWhile, take)
 import Data.Text (Text)
-import Data.Time.Calendar (Day)
-import Data.Time.LocalTime (TimeOfDay)
+import Data.Time.Calendar (Day(..), fromGregorian)
+import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
 import Data.Attoparsec.Text
-import Control.Applicative (many, (<*)) --(<$>), (<|>), (<*>), (<*), (*>))
+import Control.Applicative (many, (<*),(<|>)) --(<$>), (<*>), (<*), (*>))
 
 type Element = Text
 type Identifier = Text
 type FunctionalGroup = [TransactionSet]
 
-data Value = Text | Day | TimeOfDay | Integer | Float | Identifier
+data Value = TextVal Text
+             | DayVal Day
+             | TimeVal TimeOfDay
+             | IntVal Integer
+             | DoubleVal Double
+             deriving (Eq, Read, Show)
+
+valueParser :: Parser Value
+valueParser = dayParser <|> timeParser <|> doubleParser
+
+dayParser :: Parser Value
+dayParser = do
+  yyyy <- count 4 digit
+  mm <- count 2 digit
+  dd <- count 2 digit
+  return $ DayVal $ fromGregorian (read yyyy) (read mm)  (read dd)
+
+timeParser :: Parser Value
+timeParser = do
+  hh <- count 2 digit
+  mm <- count 2 digit
+  ss <- count 2 digit
+  return $ TimeVal $ TimeOfDay (read hh) (read mm) (read ss)
+
+doubleParser :: Parser Value
+doubleParser = do
+  d <- double
+  return $ DoubleVal d
 
 data Interchange =
-  Interchange { interchangeId :: Text
-              , interchangeSegment :: Segment
+  Interchange { interchangeSegment :: Segment
               , functionalGroups :: [FunctionalGroup]
               }
   deriving Show
