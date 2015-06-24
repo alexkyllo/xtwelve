@@ -8,6 +8,7 @@ import Data.Time.Calendar (Day(..), fromGregorian)
 import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
 import Data.Attoparsec.Text
+import Data.Scientific (Scientific)
 import Control.Applicative (many, (<*),(<|>)) --(<$>), (<*>), (<*), (*>))
 
 type Element = Text
@@ -17,12 +18,11 @@ type FunctionalGroup = [TransactionSet]
 data Value = TextVal Text
              | DayVal Day
              | TimeVal TimeOfDay
-             | IntVal Integer
-             | DoubleVal Double
-             deriving (Eq, Read, Show)
+             | NumVal Scientific
+             deriving (Eq, Show)
 
 valueParser :: Parser Value
-valueParser = dayParser <|> timeParser <|> doubleParser
+valueParser = dayParser <|> timeParser <|> numberParser
 
 dayParser :: Parser Value
 dayParser = do
@@ -38,10 +38,15 @@ timeParser = do
   ss <- count 2 digit
   return $ TimeVal $ TimeOfDay (read hh) (read mm) (read ss)
 
-doubleParser :: Parser Value
-doubleParser = do
-  d <- double
-  return $ DoubleVal d
+numberParser :: Parser Value
+numberParser = do
+  n <- scientific
+  return $ NumVal n
+
+textParser :: [Char] -> Parser Value
+textParser notChars = do
+  txt <- takeWhile1 $ satisfy (`notElem` notChars)
+  return $ TextVal txt
 
 data Interchange =
   Interchange { interchangeSegment :: Segment
@@ -104,7 +109,7 @@ isaParser = do
   return $ Segment sid (sid:elems)
 
 element :: Char -> Parser Element
-element sep = takeWhile (`notElem` [sep, terminChar])
+element sep = takeWhile1 (`notElem` [sep, terminChar])
 
 elementList :: Char -> Parser [Element]
 elementList sep = sepBy (element sep) $ char sep
