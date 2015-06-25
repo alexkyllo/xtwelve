@@ -45,7 +45,7 @@ numberParser = do
 
 textParser :: [Char] -> Parser Value
 textParser notChars = do
-  txt <- takeWhile1 $ satisfy (`notElem` notChars)
+  txt <- takeWhile1 (`notElem` notChars)
   return $ TextVal txt
 
 data Interchange =
