@@ -21,8 +21,8 @@ data Value = TextVal Text
              | NumVal Scientific
              deriving (Eq, Show)
 
-valueParser :: Parser Value
-valueParser = dayParser <|> timeParser <|> numberParser
+valueParser :: Char -> Char -> Parser Value
+valueParser sepChar termChar = dayParser <|> timeParser <|> numberParser <|> (textParser [sepChar, termChar])
 
 dayParser :: Parser Value
 dayParser = do
