@@ -98,12 +98,20 @@ testSegment = "GS*PO*4405197800*999999999*20101127*1719*1421*X*004010VICS\n"
 terminChar :: Char
 terminChar = '\n'
 
-isaParser :: Parser Segment
+isaParser :: Parser Interchange
 isaParser = do
   sid <- string "ISA"
   sep <- anyChar
-  elems <- elementList sep terminChar
-  return $ Segment sid (sid:elems)
+  elems <- count 15 (element1 sep <* char sep)
+  delim <- anyChar
+  termin <- anyChar
+  return $ Interchange (Segment sid (sid:elems)) []
+
+element1 :: Char -> Parser Element
+element1 sepChar = takeWhile $ (\c -> c /= sepChar)
+
+elementList1 :: Char -> Parser [Element]
+elementList1 sep = sepBy (element1 sep) $ char sep
 
 element :: Char -> Char -> Parser Element
 element sepChar termChar = takeWhile (`notElem` [sepChar, termChar])
