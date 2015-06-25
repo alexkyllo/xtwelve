@@ -102,27 +102,27 @@ isaParser :: Parser Segment
 isaParser = do
   sid <- string "ISA"
   sep <- anyChar
-  elems <- elementList sep
+  elems <- elementList sep terminChar
   return $ Segment sid (sid:elems)
 
-element :: Char -> Parser Element
-element sep = takeWhile1 (`notElem` [sep, terminChar])
+element :: Char -> Char -> Parser Element
+element sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
 
-elementList :: Char -> Parser [Element]
-elementList sep = sepBy (element sep) $ char sep
+elementList :: Char -> Char-> Parser [Element]
+elementList sepChar termChar = sepBy (element sepChar termChar) $ char sepChar
 
 segmentParser :: Char -> Parser Segment
 segmentParser sepChar = do
-  sid <- element sepChar
+  sid <- element sepChar terminChar
   char sepChar
-  elems <- elementList sepChar
+  elems <- elementList sepChar terminChar
   return $ Segment sid (sid:elems)
 
 interchangeParser :: Parser [Segment]
 interchangeParser = do
   sid <- string "ISA"
-  sep <- anyChar
-  elems <- elementList sep
+  sepChar <- anyChar
+  elems <- elementList sepChar terminChar
   endOfLine
-  segs <- many $ (segmentParser sep) <* endOfLine
+  segs <- many $ (segmentParser sepChar) <* endOfLine
   return $ [(Segment sid (sid:elems))] ++ segs
