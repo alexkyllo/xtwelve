@@ -106,7 +106,7 @@ isaParser = do
   return $ Segment sid (sid:elems)
 
 element :: Char -> Char -> Parser Element
-element sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
+element sepChar termChar = takeWhile (`notElem` [sepChar, termChar])
 
 elementList :: Char -> Char-> Parser [Element]
 elementList sepChar termChar = sepBy (element sepChar termChar) $ char sepChar
