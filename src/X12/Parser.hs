@@ -9,7 +9,7 @@ import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
 import Data.Attoparsec.Text
 import Data.Scientific (Scientific)
-import Control.Applicative (many, (<*),(<|>)) --(<$>), (<*>), (<*), (*>))
+import Control.Applicative (many, (<*),(*>),(<*>),(<|>),(<$>))
 
 type Element = Text
 type Identifier = Text
@@ -22,31 +22,28 @@ data Value = TextVal Text
              deriving (Eq, Show)
 
 valueParser :: Char -> Char -> Parser Value
-valueParser sepChar termChar = dayParser <|> timeParser <|> numberParser <|> (textParser [sepChar, termChar])
+valueParser sepChar termChar = DayVal  <$> dayParser
+                           <|> TimeVal <$> timeParser
+                           <|> NumVal  <$> scientific
+                           <|> TextVal <$> textParser sepChar termChar
+                           <* eitherP (char sepChar) (char termChar)
 
-dayParser :: Parser Value
+dayParser :: Parser Day
 dayParser = do
   yyyy <- count 4 digit
   mm <- count 2 digit
   dd <- count 2 digit
-  return $ DayVal $ fromGregorian (read yyyy) (read mm)  (read dd)
+  return $ fromGregorian (read yyyy) (read mm)  (read dd)
 
-timeParser :: Parser Value
+timeParser :: Parser TimeOfDay
 timeParser = do
   hh <- count 2 digit
   mm <- count 2 digit
   ss <- count 2 digit
-  return $ TimeVal $ TimeOfDay (read hh) (read mm) (read ss)
+  return $ TimeOfDay (read hh) (read mm) (read ss)
 
-numberParser :: Parser Value
-numberParser = do
-  n <- scientific
-  return $ NumVal n
-
-textParser :: [Char] -> Parser Value
-textParser notChars = do
-  txt <- takeWhile1 (`notElem` notChars)
-  return $ TextVal txt
+textParser :: Char -> Char -> Parser Text
+textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
 
 data Interchange =
   Interchange { interchangeSegment :: Segment
