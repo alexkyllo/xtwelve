@@ -19,8 +19,8 @@ data Value = AN Text
              | ID Text
              | DT Day
              | TM TimeOfDay
-             | R Scientific
-             | Nn Integer
+             | R  Scientific
+             | N  Integer
              deriving (Eq, Show)
 
 valueParser :: Text -> Parser Value
@@ -28,7 +28,7 @@ valueParser valtype = case valtype of
   "DT" -> DT <$> dayParser
   "TM" -> TM <$> timeParser
   "R"  -> R  <$> scientific
-  "Nn" -> Nn <$> decimal
+  "N"  -> N  <$> (signed decimal)
   "AN" -> AN <$> takeText -- textParser sep term <* eitherP (char sep) (char term)
 
 dayParser :: Parser Day
@@ -76,6 +76,11 @@ data Segment =
           }
   deriving Show
 
+data SegmentVal =
+  SegmentVal { segmentValId :: Text
+             , elementVals :: [ElementVal]
+             }
+
 data Loop =
   Loop { loopId :: Text
        , segments :: [Segment]
@@ -87,6 +92,57 @@ data ElementVal =
              , elementType :: Text
              , elementValue :: Value
              }
+  deriving Show
+
+isa = SegmentVal { segmentValId="ISA"
+              , elementVals=[
+                ElementVal { elementId="I01"
+                           , elementType="ID"
+                           }
+                , ElementVal { elementId="I02"
+                             , elementType="AN"
+                             }
+                , ElementVal { elementId="I03"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I04"
+                             , elementType="AN"
+                             }
+                , ElementVal { elementId="I05"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I06"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I07"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I08"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I09"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I10"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I11"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I12"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I13"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I14"
+                             , elementType="ID"
+                             }
+                , ElementVal { elementId="I15"
+                             , elementType="ID"
+                             }
+                ]
+              }
 
 data S850 = S850 {
              }
