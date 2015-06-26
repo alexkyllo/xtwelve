@@ -90,59 +90,74 @@ data Loop =
 data ElementVal =
   ElementVal { elementId :: Text
              , elementType :: Text
-             , elementValue :: Value
+             , elementValue :: Maybe Value
              }
   deriving Show
 
 isa = SegmentVal { segmentValId="ISA"
-              , elementVals=[
-                ElementVal { elementId="I01"
-                           , elementType="ID"
-                           }
-                , ElementVal { elementId="I02"
-                             , elementType="AN"
-                             }
-                , ElementVal { elementId="I03"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I04"
-                             , elementType="AN"
-                             }
-                , ElementVal { elementId="I05"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I06"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I07"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I08"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I09"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I10"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I11"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I12"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I13"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I14"
-                             , elementType="ID"
-                             }
-                , ElementVal { elementId="I15"
-                             , elementType="ID"
-                             }
-                ]
-              }
+                 , elementVals=[
+                   ElementVal { elementId="ISA01"
+                              , elementType="ID"
+                              , elementValue=Just (ID "01")
+                              }
+                   , ElementVal { elementId="ISA02"
+                                , elementType="AN"
+                                , elementValue=Just (AN "0000000000")
+                                }
+                   , ElementVal { elementId="ISA03"
+                                , elementType="ID"
+                                , elementValue=Just (ID "01")
+                                }
+                   , ElementVal { elementId="ISA04"
+                                , elementType="AN"
+                                , elementValue=Just (AN "          ")
+                                }
+                   , ElementVal { elementId="ISA05"
+                                , elementType="ID"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA06"
+                                , elementType="AN"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA07"
+                                , elementType="ID"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA08"
+                                , elementType="AN"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA09"
+                                , elementType="DT"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA10"
+                                , elementType="TM"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA11"
+                                , elementType="ID"
+                                , elementValue=Just (ID "U")
+                                }
+                   , ElementVal { elementId="ISA12"
+                                , elementType="ID"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA13"
+                                , elementType="N"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA14"
+                                , elementType="ID"
+                                , elementValue=Nothing
+                                }
+                   , ElementVal { elementId="ISA15"
+                                , elementType="ID"
+                                , elementValue=Nothing
+                                }
+                   ]
+                 }
 
 data S850 = S850 {
              }
