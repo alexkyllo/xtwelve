@@ -23,12 +23,13 @@ data Value = AN Text
              | Nn Integer
              deriving (Eq, Show)
 
-valueParser :: Text -> Char -> Char -> Parser Value
-valueParser valtype sep term = case valtype of
+valueParser :: Text -> Parser Value
+valueParser valtype = case valtype of
   "DT" -> DT <$> dayParser
   "TM" -> TM <$> timeParser
   "R"  -> R  <$> scientific
-  "AN" -> AN <$> textParser sep term <* eitherP (char sep) (char term)
+  "Nn" -> Nn <$> decimal
+  "AN" -> AN <$> takeText -- textParser sep term <* eitherP (char sep) (char term)
 
 dayParser :: Parser Day
 dayParser = do
