@@ -15,18 +15,20 @@ type Element = Text
 type Identifier = Text
 type FunctionalGroup = [TransactionSet]
 
-data Value = TextVal Text
-             | DayVal Day
-             | TimeVal TimeOfDay
-             | NumVal Scientific
+data Value = AN Text
+             | ID Text
+             | DT Day
+             | TM TimeOfDay
+             | R Scientific
+             | Nn Integer
              deriving (Eq, Show)
 
-valueParser :: Char -> Char -> Parser Value
-valueParser sepChar termChar = DayVal  <$> dayParser
-                           <|> TimeVal <$> timeParser
-                           <|> NumVal  <$> scientific
-                           <|> TextVal <$> textParser sepChar termChar
-                           <* eitherP (char sepChar) (char termChar)
+valueParser :: Text -> Char -> Char -> Parser Value
+valueParser valtype sep term = case valtype of
+  "DT" -> DT <$> dayParser
+  "TM" -> TM <$> timeParser
+  "R"  -> R  <$> scientific
+  "AN" -> AN <$> textParser sep term <* eitherP (char sep) (char term)
 
 dayParser :: Parser Day
 dayParser = do
@@ -78,6 +80,12 @@ data Loop =
        , segments :: [Segment]
        }
   deriving Show
+
+data ElementVal =
+  ElementVal { elementId :: Text
+             , elementType :: Text
+             , elementValue :: Value
+             }
 
 data S850 = S850 {
              }
