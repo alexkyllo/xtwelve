@@ -3,13 +3,13 @@
 
 module X12.Parser where
 import Prelude hiding (concat, takeWhile, take)
-import Data.Text (Text)
+import Data.Text (Text(..))
 import Data.Time.Calendar (Day(..), fromGregorian)
 import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
 import Data.Attoparsec.Text
 import Data.Scientific (Scientific)
-import Control.Applicative (many, (<*),(*>),(<*>),(<|>),(<$>))
+import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 
 type Element = Text
 type Identifier = Text
@@ -23,13 +23,32 @@ data Value = AN Text
              | N  Integer
              deriving (Eq, Show)
 
-valueParser :: Text -> Parser Value
-valueParser valtype = case valtype of
+value :: Text -> Parser Value
+value valtype = case valtype of
   "DT" -> DT <$> (dayParser8 <|> dayParser6)
   "TM" -> TM <$> timeParser
   "R"  -> R  <$> scientific
   "N"  -> N  <$> (signed decimal)
-  "AN" -> AN <$> takeText -- textParser sep term <* eitherP (char sep) (char term)
+  "ID" -> ID <$> takeText
+  otherwise -> AN <$> takeText
+
+parseDT :: Parser Value
+parseDT = DT <$> (dayParser8 <|> dayParser6)
+
+parseTM :: Parser Value
+parseTM = TM <$> timeParser
+
+parseR :: Parser Value
+parseR = R <$> scientific
+
+parseN :: Parser Value
+parseN = N <$> (signed decimal)
+
+parseID :: Char -> Char -> Parser Value
+parseID sep term = ID <$> takeWhile (`notElem` [sep, term])
+
+parseAN :: Char -> Char -> Parser Value
+parseAN sep term = AN <$> takeWhile (`notElem` [sep, term])
 
 dayParser8 :: Parser Day
 dayParser8 = do
@@ -87,6 +106,7 @@ data SegmentVal =
   SegmentVal { segmentValId :: Text
              , elementVals :: [ElementVal]
              }
+  deriving Show
 
 data Loop =
   Loop { loopId :: Text
@@ -101,7 +121,7 @@ data ElementVal =
              }
   deriving Show
 
-isa = SegmentVal { segmentValId="ISA"
+isadefaults = SegmentVal { segmentValId="ISA"
                  , elementVals=[
                    ElementVal { elementId="ISA01"
                               , elementType="ID"
@@ -184,6 +204,8 @@ testSegment = "GS*PO*4405197800*999999999*20101127*1719*1421*X*004010VICS\n"
 
 terminChar :: Char
 terminChar = '\n'
+
+isatypes = ["ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID"]
 
 isaParser :: Parser Interchange
 isaParser = do
