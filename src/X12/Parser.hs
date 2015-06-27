@@ -3,7 +3,7 @@
 
 module X12.Parser where
 import Prelude hiding (concat, takeWhile, take)
-import Data.Text (Text(..))
+import Data.Text (Text(..), pack)
 import Data.Time.Calendar (Day(..), fromGregorian)
 import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
@@ -26,7 +26,7 @@ data Value = AN Text
 value :: Text -> Parser Value
 value valtype = case valtype of
   "DT" -> DT <$> (dayParser8 <|> dayParser6)
-  "TM" -> TM <$> timeParser
+  "TM" -> TM <$> (timeParser6 <|> timeParser4)
   "R"  -> R  <$> scientific
   "N"  -> N  <$> (signed decimal)
   "ID" -> ID <$> takeText
@@ -36,7 +36,7 @@ parseDT :: Parser Value
 parseDT = DT <$> (dayParser8 <|> dayParser6)
 
 parseTM :: Parser Value
-parseTM = TM <$> timeParser
+parseTM = TM <$> (timeParser6 <|> timeParser4)
 
 parseR :: Parser Value
 parseR = R <$> scientific
@@ -64,12 +64,57 @@ dayParser6 = do
   dd <- count 2 digit
   return $ fromGregorian (read ("20" ++ yy)) (read mm) (read dd)
 
-timeParser :: Parser TimeOfDay
-timeParser = do
+timeParser6 :: Parser TimeOfDay
+timeParser6 = do
   hh <- count 2 digit
   mm <- count 2 digit
   ss <- count 2 digit
   return $ TimeOfDay (read hh) (read mm) (read ss)
+
+timeParser4 :: Parser TimeOfDay
+timeParser4 = do
+  hh <- count 2 digit
+  mm <- count 2 digit
+  return $ TimeOfDay (read hh) (read mm) 00
+
+parseISA :: Parser [Value]
+parseISA = do
+  isa <- take 3
+  sep <- anyChar
+  isa01 <- parseID sep eol
+  char sep
+  isa02 <- parseAN sep eol
+  char sep
+  isa03 <- parseID sep eol
+  char sep
+  isa04 <- parseAN sep eol
+  char sep
+  isa05 <- parseID sep eol
+  char sep
+  isa06 <- parseAN sep eol
+  char sep
+  isa07 <- parseID sep eol
+  char sep
+  isa08 <- parseAN sep eol
+  char sep
+  isa09 <- parseDT
+  char sep
+  isa10 <- parseTM
+  char sep
+  isa11 <- parseID sep eol
+  char sep
+  isa12 <- parseID sep eol
+  char sep
+  isa13 <- parseN
+  char sep
+  isa14 <- parseID sep eol
+  char sep
+  isa15 <- parseID sep eol
+  char sep
+  delim <- take 1
+  term <- take 1
+  return $ [ID isa, isa01, isa02, isa03, isa04, isa05, isa06, isa07, isa08, isa09, isa10, isa11, isa12, isa13, isa14, isa15, ID delim, ID term]
+  where eol = '\n'
 
 textParser :: Char -> Char -> Parser Text
 textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
