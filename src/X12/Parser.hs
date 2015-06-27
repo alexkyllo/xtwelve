@@ -25,18 +25,25 @@ data Value = AN Text
 
 valueParser :: Text -> Parser Value
 valueParser valtype = case valtype of
-  "DT" -> DT <$> dayParser
+  "DT" -> DT <$> (dayParser8 <|> dayParser6)
   "TM" -> TM <$> timeParser
   "R"  -> R  <$> scientific
   "N"  -> N  <$> (signed decimal)
   "AN" -> AN <$> takeText -- textParser sep term <* eitherP (char sep) (char term)
 
-dayParser :: Parser Day
-dayParser = do
+dayParser8 :: Parser Day
+dayParser8 = do
   yyyy <- count 4 digit
   mm <- count 2 digit
   dd <- count 2 digit
   return $ fromGregorian (read yyyy) (read mm)  (read dd)
+
+dayParser6 :: Parser Day
+dayParser6 = do
+  yy <- count 2 digit
+  mm <- count 2 digit
+  dd <- count 2 digit
+  return $ fromGregorian (read ("20" ++ yy)) (read mm) (read dd)
 
 timeParser :: Parser TimeOfDay
 timeParser = do
