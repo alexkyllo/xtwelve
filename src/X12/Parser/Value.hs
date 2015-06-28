@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 -- | Functions and types for parsing ANSI X12 data types
 
 module X12.Parser.Value where
@@ -9,7 +10,6 @@ import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
 import Data.Scientific (Scientific)
 import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
-
 
 data Value = AN Text
              | ID Text
