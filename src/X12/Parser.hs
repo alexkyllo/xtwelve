@@ -2,8 +2,9 @@
 -- | Parser for ANSI X12 EDI Data Format
 
 module X12.Parser where
-import Prelude hiding (concat, takeWhile, take)
+import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
+import Data.Map hiding (map)
 import Data.Text (Text)
 import Data.Attoparsec.Text
 import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
@@ -50,6 +51,24 @@ parseISA = do
   term <- take 1
   return $ [ID isa, isa01, isa02, isa03, isa04, isa05, isa06, isa07, isa08, isa09, isa10, isa11, isa12, isa13, isa14, isa15, ID delim, ID term]
   where eol = '\n'
+
+
+parseSegment :: Char -> Char -> Parser [Value]
+parseSegment sep term = do
+  ident <- element sep term
+  typeList <- pure (lookup ident segmentTypes)
+  elements <- elementList sep term
+  case typeList of
+    Nothing -> error "Segment definition not found."
+    Just xs -> undefined -- figure out how to apply a [Parser] to a [Text]
+
+segmentTypes = fromList ([("ISA" :: Text, isaTypes)])
+
+getSegmentParsers :: [Text] -> [Parser Value]
+getSegmentParsers xs = fmap value xs
+
+isaTypes :: [Text]
+isaTypes = ["ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN"]
 
 textParser :: Char -> Char -> Parser Text
 textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
@@ -184,8 +203,6 @@ testSegment = "GS*PO*4405197800*999999999*20101127*1719*1421*X*004010VICS\n"
 
 terminChar :: Char
 terminChar = '\n'
-
-isatypes = ["ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID"]
 
 isaParser :: Parser Interchange
 isaParser = do
