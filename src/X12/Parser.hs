@@ -52,15 +52,18 @@ parseISA = do
   return $ [ID isa, isa01, isa02, isa03, isa04, isa05, isa06, isa07, isa08, isa09, isa10, isa11, isa12, isa13, isa14, isa15, ID delim, ID term]
   where eol = '\n'
 
+combineParsers :: [Parser a] -> Parser [a]
+combineParsers = many . choice
 
 parseSegment :: Char -> Char -> Parser [Value]
 parseSegment sep term = do
   ident <- element sep term
   typeList <- pure (lookup ident segmentTypes)
-  elements <- elementList sep term
   case typeList of
     Nothing -> error "Segment definition not found."
-    Just xs -> undefined -- figure out how to apply a [Parser] to a [Text]
+    Just xs -> do
+      elements <- sepBy (parseAN sep term) (char sep)
+      return elements --infinite loop!
 
 segmentTypes = fromList ([("ISA" :: Text, isaTypes)])
 

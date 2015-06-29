@@ -25,8 +25,8 @@ value valtype = case valtype of
   "TM" -> TM <$> (timeParser6 <|> timeParser4)
   "R"  -> R  <$> scientific
   "N"  -> N  <$> (signed decimal)
-  "ID" -> ID <$> takeText
-  otherwise -> AN <$> takeText
+  "ID" -> ID <$> (textParser '*' '\n')
+  otherwise -> AN <$> (textParser '*' '\n')
 
 parseDT :: Parser Value
 parseDT = DT <$> (dayParser8 <|> dayParser6)
@@ -72,3 +72,6 @@ timeParser4 = do
   hh <- count 2 digit
   mm <- count 2 digit
   return $ TimeOfDay (read hh) (read mm) 00
+
+textParser :: Char -> Char -> Parser Text
+textParser sep term = takeWhile (`notElem` [sep, term])
