@@ -72,7 +72,7 @@ getSegmentParsers :: [Text] -> [Parser Value]
 getSegmentParsers xs = fmap value xs
 
 isaTypes :: [Text]
-isaTypes = ["ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN","AN"]
+isaTypes = ["ID","ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN"]
 
 textParser :: Char -> Char -> Parser Text
 textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
