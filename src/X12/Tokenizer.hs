@@ -8,17 +8,17 @@ import Data.Text (Text)
 import Data.Attoparsec.Text
 import Control.Applicative (pure, many, (<*), (*>),(<*>),(<|>),(<$>))
 
-type Element = Text
-type Segment = [Element]
-type Interchange = [Segment]
+type ElementToken = Text
+--type SegmentTokens = [Element]
+--type InterchangeTokens = [Segment]
 
-element :: Char -> Char -> Parser Element
+element :: Char -> Char -> Parser ElementToken
 element sep term = takeWhile (`notElem` [sep, term])
 
-segment :: Char -> Char -> Parser Segment
+segment :: Char -> Char -> Parser [ElementToken]
 segment sep term = sepBy (element sep term) $ char sep
 
-isa :: Parser Interchange
+isa :: Parser [[ElementToken]]
 isa = do
   i <- string "ISA"
   sep <- anyChar
