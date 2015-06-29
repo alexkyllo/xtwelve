@@ -4,6 +4,7 @@
 module X12.Parser where
 import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
+import X12.Tokenizer
 import Data.Map hiding (map)
 import Data.Text (Text)
 import Data.Attoparsec.Text
@@ -71,7 +72,7 @@ getSegmentParsers :: [Text] -> [Parser Value]
 getSegmentParsers xs = fmap value xs
 
 isaTypes :: [Text]
-isaTypes = ["ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN"]
+isaTypes = ["ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN","AN"]
 
 textParser :: Char -> Char -> Parser Text
 textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
@@ -222,8 +223,8 @@ element1 sepChar = takeWhile $ (\c -> c /= sepChar)
 elementList1 :: Char -> Parser [Element]
 elementList1 sep = sepBy (element1 sep) $ char sep
 
-element :: Char -> Char -> Parser Element
-element sepChar termChar = takeWhile (`notElem` [sepChar, termChar])
+elementP :: Char -> Char -> Parser Element
+elementP sepChar termChar = takeWhile (`notElem` [sepChar, termChar])
 
 elementList :: Char -> Char-> Parser [Element]
 elementList sepChar termChar = sepBy (element sepChar termChar) $ char sepChar
@@ -243,3 +244,9 @@ interchangeParser = do
   endOfLine
   segs <- many $ (segmentParser sepChar) <* endOfLine
   return $ [(Segment sid (sid:elems))] ++ segs
+
+parseSegmentTok :: Either String [Text] -> [Either String Value]
+parseSegmentTok (Right r) = do
+  parsedElements <- zipWith parseOnly (map value isaTypes) r
+  return parsedElements
+parseSegmentTok (Left err) = error $ "A parsing error was found: " ++ err
