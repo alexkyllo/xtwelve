@@ -5,6 +5,7 @@ module X12.Parser where
 import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
 import X12.Tokenizer
+import Data.Either
 import Data.Map hiding (map)
 import Data.Text (Text)
 import Data.Attoparsec.Text
@@ -250,3 +251,8 @@ parseSegmentTok (Right r) = do
   parsedElements <- zipWith parseOnly (map value isaTypes) r
   return parsedElements
 parseSegmentTok (Left err) = error $ "A parsing error was found: " ++ err
+
+fromEithers :: [Either String Value] -> Either [String] [Value]
+fromEithers eithers = case lefts eithers of
+  [] -> Right (rights eithers)
+  _ -> Left (lefts eithers)
