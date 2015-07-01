@@ -25,26 +25,26 @@ value valtype = case valtype of
   "TM" -> TM <$> (timeParser6 <|> timeParser4)
   "R"  -> R  <$> scientific
   "N"  -> N  <$> (signed decimal)
-  "ID" -> ID <$> (textParser '*' '\n')
-  otherwise -> AN <$> (textParser '*' '\n')
+  "ID" -> ID <$> (takeText)
+  otherwise -> AN <$> (takeText)
 
-parseDT :: Parser Value
-parseDT = DT <$> (dayParser8 <|> dayParser6)
+pDT :: Parser Value
+pDT = DT <$> (dayParser8 <|> dayParser6)
 
-parseTM :: Parser Value
-parseTM = TM <$> (timeParser6 <|> timeParser4)
+pTM :: Parser Value
+pTM = TM <$> (timeParser6 <|> timeParser4)
 
-parseR :: Parser Value
-parseR = R <$> scientific
+pR :: Parser Value
+pR = R <$> scientific
 
-parseN :: Parser Value
-parseN = N <$> (signed decimal)
+pN :: Parser Value
+pN = N <$> (signed decimal)
 
-parseID :: Char -> Char -> Parser Value
-parseID sep term = ID <$> takeWhile (`notElem` [sep, term])
+pID :: Parser Value
+pID = ID <$> takeText
 
-parseAN :: Char -> Char -> Parser Value
-parseAN sep term = AN <$> takeWhile (`notElem` [sep, term])
+pAN :: Parser Value
+pAN = AN <$> takeText
 
 dayParser8 :: Parser Day
 dayParser8 = do

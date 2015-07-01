@@ -9,29 +9,18 @@ import Data.Either
 import Data.Map hiding (map)
 import Data.Text (Text, unpack)
 import Data.Attoparsec.Text
+import Data.Time.Calendar (Day(..))
+import Data.Time.LocalTime (TimeOfDay(..))
+import Data.Scientific (Scientific)
 import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 
 type Element = Text
 type Identifier = Text
 type FunctionalGroup = [TransactionSet]
 
-
-parseSegment :: Char -> Char -> Parser [Value]
-parseSegment sep term = do
-  ident <- element sep term
-  typeList <- pure (lookup ident segmentTypes)
-  case typeList of
-    Nothing -> error "Segment definition not found."
-    Just xs -> do
-      elements <- sepBy (parseAN sep term) (char sep)
-      return elements --infinite loop!
-
 segmentTypes = fromList ([("ISA" :: Text, isaTypes)
                          , ("GS" :: Text, gsTypes)
                          , ("ST" :: Text, stTypes)])
-
-getSegmentParsers :: [Text] -> [Parser Value]
-getSegmentParsers xs = fmap value xs
 
 isaTypes :: [Text]
 isaTypes = ["ID","ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN"]
@@ -41,8 +30,26 @@ gsTypes = ["ID","ID","AN","AN","DT","TM","N","ID","AN"]
 stTypes :: [Text]
 stTypes = ["ID","ID","ID","ID","ID","AN","AN","DT","ID","ID","R","ID","ID","AN","AN","AN","ID","ID","R","DT","N","DT","N","N","DT","N","R","AN"]
 
-textParser :: Char -> Char -> Parser Text
-textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
+{-- Wishing I could do something like this:
+type ID = Text
+type AN = Text
+type DT = Day
+type TM = TimeOfDay
+type R = Scientific
+type N = Integer
+
+data SegmentT = ISA ID ID AN ID AN ID AN ID AN DT TM ID ID N ID ID AN
+              | GS ID ID AN AN DT TM N ID AN
+              | ST ID ID ID ID ID AN AN DT ID ID R ID ID AN AN AN ID ID R DT N DT N N DT N R AN
+
+getTypeParser x = case x of
+  DT _ -> DT <$> dayParser8 <|> dayParser6
+  TM _ -> TM <$> timeParser6 <|> timeParser4
+  R _  -> R <$> scientific
+  N _  -> N <$> (signed decimal)
+  ID _ -> ID <$> takeText
+  _    -> AN <$> takeText
+--}
 
 data Interchange =
   Interchange { interchangeSegment :: Segment
@@ -101,7 +108,7 @@ parseSegmentTokE (Left err) = error $ "A parsing error was found: " ++ err
 parseSegmentTok :: [Text] -> Either String [Either String Value]
 parseSegmentTok s@(x:xs) = case getSegmentTypes x of
   Just segTypes -> Right $ zipWith parseOnly (map value segTypes) s
-  Nothing -> Left $ "Segment definition not found for segment type: " ++ (unpack x)
+  Nothing -> Left $ "Segment definition not found: " ++ (unpack x)
 parseSegmentTok _ = Left "Received an empty segment."
 
 getSegmentTypes :: Text -> Maybe [Text]
