@@ -84,13 +84,27 @@ data ElementVal =
              }
   deriving Show
 
-parseSegmentTok :: Either String [Text] -> [Either String Value]
-parseSegmentTok (Right r) = do
-  parsedElements <- zipWith parseOnly (map value isaTypes) r
+parseSegmentTokE :: Either String [Text] -> Either [String] [Value]
+parseSegmentTokE (Right r) = do
+  parsedElements <- fromEithers $ zipWith parseOnly (map value isaTypes) r
   return parsedElements
-parseSegmentTok (Left err) = error $ "A parsing error was found: " ++ err
+parseSegmentTokE (Left err) = error $ "A parsing error was found: " ++ err
+
+
+parseSegmentTok :: [Text] -> [Either String Value]
+parseSegmentTok s@(x:xs) = zipWith parseOnly (map value $ getSegmentTypes x) s
+parseSegmentTok _ = error "Empty segment."
+
+getSegmentTypes :: Text -> [Text]
+getSegmentTypes x = case lookup x segmentTypes of
+  Just xs -> xs
+  Nothing -> error "Segment definition not found."
 
 fromEithers :: [Either String Value] -> Either [String] [Value]
 fromEithers eithers = case lefts eithers of
   [] -> Right (rights eithers)
   _ -> Left (lefts eithers)
+
+parseInterchangeTok :: Either String [[Text]] -> [[Either String Value]]
+parseInterchangeTok (Right r) = map parseSegmentTok r
+parseInterchangeTok (Left err) = error $ "A parsing error was found: " ++ err
