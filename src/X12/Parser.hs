@@ -7,7 +7,7 @@ import X12.Parser.Value
 import X12.Tokenizer
 import Data.Either
 import Data.Map hiding (map)
-import Data.Text (Text)
+import Data.Text (Text, unpack)
 import Data.Attoparsec.Text
 import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 
@@ -98,20 +98,21 @@ parseSegmentTokE (Right r) = do
 parseSegmentTokE (Left err) = error $ "A parsing error was found: " ++ err
 
 
-parseSegmentTok :: [Text] -> [Either String Value]
-parseSegmentTok s@(x:xs) = zipWith parseOnly (map value $ getSegmentTypes x) s
-parseSegmentTok _ = error "Empty segment."
+parseSegmentTok :: [Text] -> Either String [Either String Value]
+parseSegmentTok s@(x:xs) = case getSegmentTypes x of
+  Just segTypes -> Right $ zipWith parseOnly (map value segTypes) s
+  Nothing -> Left $ "Segment definition not found for segment type: " ++ (unpack x)
+parseSegmentTok _ = Left "Received an empty segment."
 
-getSegmentTypes :: Text -> [Text]
-getSegmentTypes x = case lookup x segmentTypes of
-  Just xs -> xs
-  Nothing -> error "Segment definition not found."
+getSegmentTypes :: Text -> Maybe [Text]
+getSegmentTypes x = lookup x segmentTypes
 
 fromEithers :: [Either String Value] -> Either [String] [Value]
 fromEithers eithers = case lefts eithers of
   [] -> Right (rights eithers)
   _ -> Left (lefts eithers)
 
-parseInterchangeTok :: Either String [[Text]] -> [[Either String Value]]
+
+parseInterchangeTok :: Either String [[Text]] -> [Either String [Either String Value]]
 parseInterchangeTok (Right r) = map parseSegmentTok r
 parseInterchangeTok (Left err) = error $ "A parsing error was found: " ++ err
