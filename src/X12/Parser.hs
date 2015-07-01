@@ -26,13 +26,20 @@ parseSegment sep term = do
       elements <- sepBy (parseAN sep term) (char sep)
       return elements --infinite loop!
 
-segmentTypes = fromList ([("ISA" :: Text, isaTypes)])
+segmentTypes = fromList ([("ISA" :: Text, isaTypes)
+                         , ("GS" :: Text, gsTypes)
+                         , ("ST" :: Text, stTypes)])
 
 getSegmentParsers :: [Text] -> [Parser Value]
 getSegmentParsers xs = fmap value xs
 
 isaTypes :: [Text]
 isaTypes = ["ID","ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN"]
+
+gsTypes = ["ID","ID","AN","AN","DT","TM","N","ID","AN"]
+
+stTypes :: [Text]
+stTypes = ["ID","ID","ID","ID","ID","AN","AN","DT","ID","ID","R","ID","ID","AN","AN","AN","ID","ID","R","DT","N","DT","N","N","DT","N","R","AN"]
 
 textParser :: Char -> Char -> Parser Text
 textParser sepChar termChar = takeWhile1 (`notElem` [sepChar, termChar])
