@@ -5,7 +5,8 @@ module X12.Parser where
 import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
 import X12.Tokenizer
-import X12.Definitions.ElementTypes
+import X12.Definitions.ElementDefs
+import X12.Definitions.SegmentDefs
 import Data.Either
 import Data.Map hiding (map)
 import Data.Text (Text, unpack)
@@ -95,5 +96,5 @@ parseInterchangeTok :: Either String [[Text]] -> [Either String [Either String V
 parseInterchangeTok (Right r) = map parseSegmentTok r
 parseInterchangeTok (Left err) = error $ "A parsing error was found: " ++ err
 
-valueToElement :: [Either String Value] -> ElementVal
-valueToElement = undefined
+--readElements :: [Value] -> Either String SegmentVal
+--readElements = undefined
