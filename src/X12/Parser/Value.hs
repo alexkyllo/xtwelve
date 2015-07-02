@@ -28,23 +28,23 @@ value valtype = case valtype of
   "ID" -> ID <$> (takeText)
   otherwise -> AN <$> (takeText)
 
-pDT :: Parser Value
-pDT = DT <$> (dayParser8 <|> dayParser6)
+parseDT :: Parser Value
+parseDT = DT <$> (dayParser8 <|> dayParser6)
 
-pTM :: Parser Value
-pTM = TM <$> (timeParser6 <|> timeParser4)
+parseTM :: Parser Value
+parseTM = TM <$> (timeParser6 <|> timeParser4)
 
-pR :: Parser Value
-pR = R <$> scientific
+parseR :: Parser Value
+parseR = R <$> scientific
 
-pN :: Parser Value
-pN = N <$> (signed decimal)
+parseN :: Parser Value
+parseN = N <$> (signed decimal)
 
-pID :: Parser Value
-pID = ID <$> takeText
+parseID :: Parser Value
+parseID = ID <$> takeText
 
-pAN :: Parser Value
-pAN = AN <$> takeText
+parseAN :: Parser Value
+parseAN = AN <$> takeText
 
 dayParser8 :: Parser Day
 dayParser8 = do
