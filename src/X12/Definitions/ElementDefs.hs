@@ -12,8 +12,8 @@ data ElementDef =
              , elementType :: Text
              , elementMinLength :: Int
              , elementMaxLength :: Int
-             , elementPrecision :: Maybe Int --for N and R values
-             , elementCodeList :: (Maybe (Map Text Text))
+             , elementPrecision :: Maybe Int -- Decimal precision for N and R values
+             , elementCodeList :: (Maybe (Map Text Text)) -- Code Lists for ID values
              }
   deriving Show
 

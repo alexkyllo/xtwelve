@@ -66,6 +66,11 @@ data SegmentVal =
              }
   deriving Show
 
+data ElementVal =
+  ElementVal { elementValue :: Value
+             }
+  deriving Show
+
 data Loop =
   Loop { loopId :: Text
        , segments :: [Segment]
