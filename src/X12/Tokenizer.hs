@@ -9,20 +9,39 @@ import Data.Attoparsec.Text
 import Control.Applicative (pure, many, (<*), (*>),(<*>),(<|>),(<$>))
 
 type ElementToken = Text
---type SegmentTokens = [Element]
+type SegmentToken = [ElementToken]
 --type InterchangeTokens = [Segment]
 
-element :: Char -> Char -> Parser ElementToken
-element sep term = takeWhile (`notElem` [sep, term])
+data Separators = Separators { componentSeparator :: Char
+                             , repetitionSeparator :: Char
+                             , elementSeparator :: Char
+                             , segmentSeparator :: Char
+                             }
+                  deriving Show
 
-segment :: Char -> Char -> Parser [ElementToken]
-segment sep term = sepBy (element sep term) $ char sep
+-- | parse an ElementToken when you only know the element separator
+element1 :: Char -> Parser ElementToken
+element1 sep = takeWhile (/= sep)
 
-isa :: Parser [[ElementToken]]
+-- | parse an ElementToken using a full set of known separators
+element :: Separators -> Parser ElementToken
+element seps = takeWhile (`notElem` [elementSeparator seps, segmentSeparator seps])
+
+segment :: Separators -> Parser SegmentToken
+segment seps = sepBy (element seps) $ char (elementSeparator seps)
+
+-- | read an interchange, parsing the ISA segment first to determine what separators are used
+isa :: Parser [SegmentToken]
 isa = do
-  i <- string "ISA"
-  sep <- anyChar
-  isaElements <- segment sep '\n'
-  term <- anyChar
-  segments <- many $ (segment sep term) <* (char term)
+  i <- string "ISA" -- every Interchange starts with the text "ISA"
+  elementSep <- anyChar -- followed by any single character, which will be the element separator
+  isaElements <- count 15 $ element1 elementSep <* char elementSep -- parse the next 15 element tokens
+  componentSep <- anyChar -- ISA16 is the component separator
+  segmentSep <- anyChar -- the next character is the segment separator
+  seps <- pure $ Separators { componentSeparator = componentSep
+                            , repetitionSeparator = '\\'
+                            , elementSeparator = elementSep
+                            , segmentSeparator = segmentSep
+                            }
+  segments <- many $ (segment seps) <* (char (segmentSeparator seps))
   return $ [i:isaElements] ++ segments
