@@ -2,12 +2,12 @@
 
 module X12.Definitions.ElementUse where
 import X12.Definitions.ElementDefs (ElementDef(..))
+import X12.Definitions.RepeatCount
+import X12.Definitions.Requirement
 
-data ElementReq = Mandatory | Optional | Relational
-
-data ElementRepeatCount = Bounded Int | Unbounded
 
 data ElementUse = ElementUse { elementUseDef :: ElementDef
-                             , elementReq :: ElementReq
-                             , elementRepeatCount :: ElementRepeatCount
+                             , elementReq :: Requirement
+                             , elementRepeatCount :: RepeatCount
                              }
+                deriving Show

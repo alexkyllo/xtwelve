@@ -7,6 +7,8 @@ import X12.Parser.Value
 import X12.Tokenizer
 import X12.Definitions.ElementDefs
 import X12.Definitions.SegmentDefs
+import X12.Values.InterchangeVal
+import X12.Values.SegmentVal
 import Data.Either
 import Data.Map hiding (map)
 import Data.Text (Text, unpack)
@@ -60,12 +62,6 @@ data Segment =
           }
   deriving Show
 
-data SegmentVal =
-  SegmentVal { segmentValId :: Text
-             , elementVals :: [ElementVal]
-             }
-  deriving Show
-
 data ElementVal =
   ElementVal { elementValue :: Value
              }
@@ -101,5 +97,5 @@ parseInterchangeTok :: Either String [[Text]] -> [Either String [Either String V
 parseInterchangeTok (Right r) = map parseSegmentTok r
 parseInterchangeTok (Left err) = error $ "A parsing error was found: " ++ err
 
---readElements :: [Value] -> Either String SegmentVal
---readElements = undefined
+readInterchange :: [SegmentToken] -> InterchangeVal
+readInterchange = undefined

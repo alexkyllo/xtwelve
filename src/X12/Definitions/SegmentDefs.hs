@@ -7,3 +7,4 @@ import Data.Text
 data SegmentDef = SegmentDef { segmentId :: Text
                              , elementUses :: [ElementUse]
                              }
+                deriving Show
