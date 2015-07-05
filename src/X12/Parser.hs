@@ -5,8 +5,14 @@ module X12.Parser where
 import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
 import X12.Tokenizer
+import X12.Definitions.Requirement
+import X12.Definitions.RepeatCount
 import X12.Definitions.ElementDefs
 import X12.Definitions.SegmentDefs
+import qualified X12.Definitions.SegmentDefs.ISA
+import qualified X12.Definitions.SegmentDefs.IEA
+import X12.Definitions.SegmentUse
+import X12.Definitions.InterchangeDef
 import X12.Values.InterchangeVal
 import X12.Values.SegmentVal
 import Data.Either
@@ -92,5 +98,22 @@ parseInterchangeTok :: Either String [[Text]] -> [Either String [Either String V
 parseInterchangeTok (Right r) = map parseSegmentTok r
 parseInterchangeTok (Left err) = error $ "A parsing error was found: " ++ err
 
-readInterchange :: [SegmentToken] -> InterchangeVal
-readInterchange = undefined
+readInterchange :: Either String [SegmentToken] -> InterchangeVal
+readInterchange (Right segments) = InterchangeVal { interchangeDef = iDef
+                                                         , children = []
+                                                         }
+  where iDef = InterchangeDef { interchangeDefId = segments !! 0 !! 12
+                                        , headerSegmentUses = [SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.ISA.isa
+                                                                          , segmentReq = Mandatory
+                                                                          , segmentRepeatCount = Bounded 1
+                                                                          , segmentParent = Nothing
+                                                                          }
+                                                              ]
+                                        , trailerSegmentUses = [ SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.IEA.iea
+                                                                            , segmentReq = Mandatory
+                                                                            , segmentRepeatCount = Bounded 1
+                                                                            , segmentParent = Nothing
+                                                                            }
+                                                               ]
+                                        }
+readInterchange (Left err) =  error $ "A parsing error was found: " ++ err

@@ -9,6 +9,6 @@ import X12.Definitions.LoopDef
 data SegmentUse = SegmentUse { segmentUseDef :: SegmentDef
                              , segmentReq :: Requirement
                              , segmentRepeatCount :: RepeatCount
-                             , segmentParent :: LoopDef
+                             , segmentParent :: Maybe LoopDef
                              }
                 deriving Show

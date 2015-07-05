@@ -2,7 +2,11 @@
 -- | ISA Segment Definition
 
 module X12.Definitions.SegmentDefs.ISA where
-
+import X12.Definitions.Requirement
+import X12.Definitions.RepeatCount
+import X12.Definitions.SegmentDefs
+import X12.Definitions.ElementDefs
+import X12.Definitions.ElementUse
 
 isa = SegmentDef { segmentId = "ISA"
                  , elementUses = [ ElementUse { elementUseDef = i01

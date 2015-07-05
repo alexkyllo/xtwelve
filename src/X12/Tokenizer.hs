@@ -31,8 +31,8 @@ segment :: Separators -> Parser SegmentToken
 segment seps = sepBy (element seps) $ char (elementSeparator seps)
 
 -- | read an interchange, parsing the ISA segment first to determine what separators are used
-isa :: Parser [SegmentToken]
-isa = do
+parseISA :: Parser [SegmentToken]
+parseISA = do
   i <- string "ISA" -- every Interchange starts with the text "ISA"
   elementSep <- anyChar -- followed by any single character, which will be the element separator
   isaElements <- count 15 $ element1 elementSep <* char elementSep -- parse the next 15 element tokens
