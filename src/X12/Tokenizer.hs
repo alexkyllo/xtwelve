@@ -42,7 +42,7 @@ parseInterchange = do
   segments <- many $ (segment seps) <* (char (segmentSeparator seps))
   return $ ([i:isaElements] ++ segments, seps)
 
-tokenizeISA :: Parser (SegmentTok, Separators)
+tokenizeISA :: Parser (SegmentToken, Separators)
 tokenizeISA = do
   i <- string "ISA" -- every Interchange starts with the text "ISA"
   elementSep <- anyChar -- followed by any single character, which will be the element separator
@@ -54,4 +54,5 @@ tokenizeISA = do
                             , elementSeparator = elementSep
                             , segmentSeparator = segmentSep
                             }
-  return $ (i:isaElements, seps)
+  elementTokens <- pure $ map SimpleElementToken isaElements
+  return $ (SegmentToken "ISA" elementTokens, seps)

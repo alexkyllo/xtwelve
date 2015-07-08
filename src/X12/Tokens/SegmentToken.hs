@@ -7,3 +7,4 @@ import Data.Text
 data SegmentToken = SegmentToken { segmentTokenId :: Text
                                  , elementTokens :: [ElementToken]
                                  }
+                  deriving Show

@@ -7,3 +7,4 @@ data ElementToken = SimpleElementToken Text
                   | ComponentElementToken Text
                   | CompositeElementToken [ElementToken]
                   | RepeatedElementToken [ElementToken]
+                  deriving Show
