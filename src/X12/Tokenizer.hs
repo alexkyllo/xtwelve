@@ -7,17 +7,11 @@ import Prelude hiding (concat, takeWhile, take)
 import Data.Text (Text)
 import Data.Attoparsec.Text
 import Control.Applicative (pure, many, (<*), (*>),(<*>),(<|>),(<$>))
+import X12.Separators
 
 type ElementToken = Text
 type SegmentToken = [ElementToken]
 --type InterchangeTokens = [Segment]
-
-data Separators = Separators { componentSeparator :: Char
-                             , repetitionSeparator :: Char
-                             , elementSeparator :: Char
-                             , segmentSeparator :: Char
-                             }
-                  deriving Show
 
 -- | parse an ElementToken when you only know the element separator
 element1 :: Char -> Parser ElementToken
@@ -31,7 +25,7 @@ segment :: Separators -> Parser SegmentToken
 segment seps = sepBy (element seps) $ char (elementSeparator seps)
 
 -- | read an interchange, parsing the ISA segment first to determine what separators are used
-parseISA :: Parser [SegmentToken]
+parseISA :: Parser ([SegmentToken], Separators)
 parseISA = do
   i <- string "ISA" -- every Interchange starts with the text "ISA"
   elementSep <- anyChar -- followed by any single character, which will be the element separator
@@ -44,4 +38,4 @@ parseISA = do
                             , segmentSeparator = segmentSep
                             }
   segments <- many $ (segment seps) <* (char (segmentSeparator seps))
-  return $ [i:isaElements] ++ segments
+  return $ ([i:isaElements] ++ segments, seps)
