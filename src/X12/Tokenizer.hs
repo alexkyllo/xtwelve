@@ -56,3 +56,9 @@ tokenizeISA = do
                             }
   elementTokens <- pure $ map SimpleElementToken isaElements
   return $ (SegmentToken "ISA" elementTokens, seps)
+
+tokenizeSegment :: Separators -> Parser SegmentToken
+tokenizeSegment seps = do
+  segmentID <- take 3
+  char (elementSeparator seps)
+  return $ SegmentToken "ISA" []
