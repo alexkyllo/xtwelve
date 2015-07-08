@@ -6,6 +6,7 @@ import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
 import X12.Tokenizer
 import X12.Separators
+import X12.Tokens.SegmentToken
 import X12.Definitions.Requirement
 import X12.Definitions.RepeatCount
 import X12.Definitions.ElementDefs
@@ -99,7 +100,7 @@ parseInterchangeTok :: Either String [[Text]] -> [Either String [Either String V
 parseInterchangeTok (Right r) = map parseSegmentTok r
 parseInterchangeTok (Left err) = error $ "A parsing error was found: " ++ err
 
-readInterchange :: Either String ([SegmentToken], Separators) -> InterchangeVal
+readInterchange :: Either String ([SegmentTok], Separators) -> InterchangeVal
 readInterchange (Right (segments, seps)) = InterchangeVal { interchangeDef = iDef
                                                          , children = []
                                                          , separators = seps
