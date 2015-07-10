@@ -9,12 +9,12 @@ main :: IO ()
 main = hspec spec
 
 spec :: Spec
-spec = do
-  describe "X12.Tokenizer" $ do
-    context "Tokenize an ISA segment" $ do
-      it "tokenizes testISA into a [Text]" $ do
-        testISA ~> isa
-        `shouldParse` [["ISA","01","0000000000","01","ABCCO     ","12","4405197800     ","01","999999999      ","101127","1719","U","00400","000003438","0","P",">"]]
+spec =
+  describe "X12.Tokenizer" $
+    context "Tokenize an ISA segment" $
+      it "tokenizes testISA into a [Text]" $
+        testISA ~> tokenizeISA
+        `shouldParse` (SegmentToken {segmentTokenId = "ISA", elementTokens = [SimpleElementToken "01",SimpleElementToken "0000000000",SimpleElementToken "01",SimpleElementToken "ABCCO     ",SimpleElementToken "12",SimpleElementToken "4405197800     ",SimpleElementToken "01",SimpleElementToken "999999999      ",SimpleElementToken "101127",SimpleElementToken "1719",SimpleElementToken "U",SimpleElementToken "00400",SimpleElementToken "000003438",SimpleElementToken "0",SimpleElementToken "P"]},Separators {componentSeparator = '>', repetitionSeparator = '^', elementSeparator = '*', segmentSeparator = '\n'})
 
 
 testInterchange :: Text
