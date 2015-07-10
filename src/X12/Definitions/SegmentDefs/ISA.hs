@@ -4,11 +4,13 @@
 module X12.Definitions.SegmentDefs.ISA where
 import X12.Definitions.Requirement
 import X12.Definitions.RepeatCount
-import X12.Definitions.SegmentDefs
+import X12.Definitions.SegmentDef
 import X12.Definitions.ElementDefs
 import X12.Definitions.ElementUse
 
 isa = SegmentDef { segmentId = "ISA"
+                 , segmentName = "Interchange Control Header"
+                 , segmentPurpose = "To start and identify an interchange of zero or more functional groups and interchange-related control segments"
                  , elementUses = [ ElementUse { elementUseDef = i01
                                               , elementReq = Mandatory
                                               , elementRepeatCount = Bounded 1

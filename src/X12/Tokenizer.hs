@@ -61,4 +61,5 @@ tokenizeSegment :: Separators -> Parser SegmentToken
 tokenizeSegment seps = do
   segmentID <- take 3
   char (elementSeparator seps)
+  elementToks <- segment seps
   return $ SegmentToken "ISA" []
