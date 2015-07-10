@@ -26,7 +26,7 @@ element seps = takeWhile (`notElem` [elementSeparator seps, segmentSeparator sep
 segment :: Separators -> Parser SegmentTok
 segment seps = sepBy (element seps) $ char (elementSeparator seps)
 
--- | read an interchange, parsing the ISA segment first to determine what separators are used
+-- | Read an interchange, parsing the ISA segment first to determine what separators are used
 parseInterchange :: Parser ([SegmentTok], Separators)
 parseInterchange = do
   i <- string "ISA" -- every Interchange starts with the text "ISA"
@@ -34,13 +34,13 @@ parseInterchange = do
   isaElements <- count 15 $ element1 elementSep <* char elementSep -- parse the next 15 element tokens
   componentSep <- anyChar -- ISA16 is the component separator
   segmentSep <- anyChar -- the next character is the segment separator
-  seps <- pure $ Separators { componentSeparator = componentSep
-                            , repetitionSeparator = '\\'
-                            , elementSeparator = elementSep
-                            , segmentSeparator = segmentSep
-                            }
-  segments <- many $ (segment seps) <* (char (segmentSeparator seps))
-  return $ ([i:isaElements] ++ segments, seps)
+  seps <- pure Separators { componentSeparator = componentSep
+                          , repetitionSeparator = '\\'
+                          , elementSeparator = elementSep
+                          , segmentSeparator = segmentSep
+                          }
+  segments <- many $ segment seps <* char (segmentSeparator seps)
+  return ((i : isaElements) : segments, seps)
 
 tokenizeISA :: Parser (SegmentToken, Separators)
 tokenizeISA = do
@@ -49,17 +49,17 @@ tokenizeISA = do
   isaElements <- count 15 $ element1 elementSep <* char elementSep -- parse the next 15 element tokens
   componentSep <- anyChar -- ISA16 is the component separator
   segmentSep <- anyChar -- the next character is the segment separator
-  seps <- pure $ Separators { componentSeparator = componentSep
+  seps <- pure Separators { componentSeparator = componentSep
                             , repetitionSeparator = '^'
                             , elementSeparator = elementSep
                             , segmentSeparator = segmentSep
                             }
   elementTokens <- pure $ map SimpleElementToken isaElements
-  return $ (SegmentToken "ISA" elementTokens, seps)
+  return (SegmentToken "ISA" elementTokens, seps)
 
 tokenizeSegment :: Separators -> Parser SegmentToken
 tokenizeSegment seps = do
   segmentID <- take 3
   char (elementSeparator seps)
   elementToks <- segment seps
-  return $ SegmentToken "ISA" []
+  return $ SegmentToken segmentID (map SimpleElementToken elementToks)

@@ -10,7 +10,7 @@ import X12.Tokens.SegmentToken
 import X12.Definitions.Requirement
 import X12.Definitions.RepeatCount
 import X12.Definitions.ElementDefs
-import X12.Definitions.SegmentDefs
+import X12.Definitions.SegmentDef
 import qualified X12.Definitions.SegmentDefs.ISA
 import qualified X12.Definitions.SegmentDefs.IEA
 import X12.Definitions.SegmentUse
@@ -30,9 +30,9 @@ type Element = Text
 type Identifier = Text
 type FunctionalGroup = [TransactionSet]
 
-segmentTypes = fromList ([("ISA" :: Text, isaTypes)
+segmentTypes = fromList [("ISA" :: Text, isaTypes)
                          , ("GS" :: Text, gsTypes)
-                         , ("ST" :: Text, stTypes)])
+                         , ("ST" :: Text, stTypes)]
 
 isaTypes :: [Text]
 isaTypes = ["ID","ID","AN","ID","AN","ID","AN","ID","AN","DT","TM","ID","ID","N","ID","ID","AN"]
@@ -79,13 +79,13 @@ data Loop =
 parseSegmentTokE :: Either String [Text] -> Either String [Either String Value]
 parseSegmentTokE (Right s@(x:xs)) = case getSegmentTypes x of
   Just segTypes -> Right $ zipWith parseOnly (map value segTypes) s
-  Nothing -> Left $ "Segment definition not found: " ++ (unpack x)
+  Nothing -> Left $ "Segment definition not found: " ++ unpack x
 parseSegmentTokE _ = Left "Received an empty segment."
 
 parseSegmentTok :: [Text] -> Either String [Either String Value]
 parseSegmentTok s@(x:xs) = case getSegmentTypes x of
   Just segTypes -> Right $ zipWith parseOnly (map value segTypes) s
-  Nothing -> Left $ "Segment definition not found: " ++ (unpack x)
+  Nothing -> Left $ "Segment definition not found: " ++ unpack x
 parseSegmentTok _ = Left "Received an empty segment."
 
 getSegmentTypes :: Text -> Maybe [Text]
@@ -105,7 +105,7 @@ readInterchange (Right (segments, seps)) = InterchangeVal { interchangeDef = iDe
                                                          , children = []
                                                          , separators = seps
                                                          }
-  where iDef = InterchangeDef { interchangeDefId = segments !! 0 !! 12
+  where iDef = InterchangeDef { interchangeDefId = head segments !! 12
                                         , headerSegmentUses = [SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.ISA.isa
                                                                           , segmentReq = Mandatory
                                                                           , segmentRepeatCount = Bounded 1
