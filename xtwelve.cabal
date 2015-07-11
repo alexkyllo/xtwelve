@@ -22,7 +22,21 @@ library
                  , X12.Separators
                  , X12.Tokens.SegmentToken
                  , X12.Tokens.ElementToken
-  -- other-modules:
+  other-modules: X12.Definitions.InterchangeDef
+               , X12.Definitions.SegmentUse
+               , X12.Definitions.ElementUse
+               , X12.Definitions.Requirement
+               , X12.Definitions.LoopDef
+               , X12.Definitions.RepeatCount
+               , X12.Definitions.SegmentDef
+               , X12.Definitions.SegmentDefs.ISA
+               , X12.Definitions.SegmentDefs.IEA
+               , X12.Definitions.ElementDefs
+               , X12.Values.InterchangeVal
+               , X12.Values.SegmentVal
+               , X12.Values.ElementVal
+               , X12.Values.LoopVal
+               , X12.Values.TableVal
   -- other-extensions:
   build-depends:       base >= 4 && < 5
                      , attoparsec
