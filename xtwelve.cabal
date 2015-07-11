@@ -17,6 +17,11 @@ cabal-version:       >=1.10
 
 library
   exposed-modules: X12.Parser
+                 , X12.Parser.Value
+                 , X12.Tokenizer
+                 , X12.Separators
+                 , X12.Tokens.SegmentToken
+                 , X12.Tokens.ElementToken
   -- other-modules:
   -- other-extensions:
   build-depends:       base >= 4 && < 5
@@ -24,9 +29,26 @@ library
                      , text
                      , time
                      , scientific
-                     , hspec
-                     , hspec-attoparsec
-                     , hspec-discover
                      , containers
   hs-source-dirs:      src
   default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+
+test-suite test
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+                , test/X12
+                , test/X12/Parser
+  main-is: Spec.hs
+  build-depends: base >= 4 && < 5
+               , xtwelve
+               , attoparsec
+               , text
+               , time
+               , scientific
+               , containers
+               , hspec
+               , hspec-attoparsec
+               , hspec-discover
+  default-language: Haskell2010
+  default-extensions: OverloadedStrings
