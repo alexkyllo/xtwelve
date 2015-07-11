@@ -26,6 +26,8 @@ e479CodeList = fromList [ ( "PO"
 
 e142 = ElementDef "E142" "Application's Sender Code" "ID" 2 15 Nothing Nothing
 
+e124 = ElementDef "E124" "Aplication's Receiver Code" "ID" 2 15 Nothing Nothing
+
 e373 = ElementDef "E373" "Date" "DT" 8 8 Nothing Nothing
 
 e337 = ElementDef "E337" "Time" "TM" 4 4 Nothing Nothing

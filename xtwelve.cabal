@@ -29,8 +29,10 @@ library
                , X12.Definitions.LoopDef
                , X12.Definitions.RepeatCount
                , X12.Definitions.SegmentDef
+               , X12.Definitions.SegmentDefs
                , X12.Definitions.SegmentDefs.ISA
                , X12.Definitions.SegmentDefs.IEA
+               , X12.Definitions.SegmentDefs.GS
                , X12.Definitions.ElementDefs
                , X12.Values.InterchangeVal
                , X12.Values.SegmentVal
