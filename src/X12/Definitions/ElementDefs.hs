@@ -13,9 +13,32 @@ data ElementDef =
              , elementMinLength :: Int
              , elementMaxLength :: Int
              , elementPrecision :: Maybe Int -- Decimal precision for N and R values
-             , elementCodeList :: (Maybe (Map Text Text)) -- Code Lists for ID values
+             , elementCodeList :: Maybe (Map Text Text) -- Code Lists for ID values
              }
   deriving Show
+
+e479 = ElementDef "E479" "Functional Identifier Code" "ID" 2 2 Nothing (Just e479CodeList)
+
+e479CodeList = fromList [ ( "PO"
+                          , "Purchase Order (850)"
+                          )
+                        ]
+
+e142 = ElementDef "E142" "Application's Sender Code" "ID" 2 15 Nothing Nothing
+
+e373 = ElementDef "E373" "Date" "DT" 8 8 Nothing Nothing
+
+e337 = ElementDef "E337" "Time" "TM" 4 4 Nothing Nothing
+
+e28 = ElementDef "E28" "Group Control Number" "N" 1 9 (Just 0) Nothing
+
+e455 = ElementDef "E455" "Responsible Agency Code" "ID" 1 2 Nothing Nothing
+
+e480 = ElementDef "E480" "Version / Release / Identifier Code" "AN" 1 12 Nothing (Just e480CodeList)
+
+e480CodeList = fromList [ ("004010X091","Draft Standards Approved for Publication by ASC X12 Procedures Review Board through October 1997")
+                        , ("004010VICS","Voluntary Industry Commerce Standards v 004010")
+                        ]
 
 i01 = ElementDef { elementId = "I01"
                  , elementName = "Authorization Information Qualifier"
@@ -23,7 +46,7 @@ i01 = ElementDef { elementId = "I01"
                  , elementMinLength = 2
                  , elementMaxLength = 2
                  , elementPrecision = Nothing
-                 , elementCodeList = Just $ fromList ([("00", "No Authorization Information Present (No Meaningful Information in I02)")])
+                 , elementCodeList = Just $ fromList [("00", "No Authorization Information Present (No Meaningful Information in I02)")]
                  }
 
 i02 = ElementDef { elementId = "I02"

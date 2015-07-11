@@ -3,13 +3,17 @@
 
 module X12.Tokenizer where
 
-import Prelude hiding (concat, takeWhile, take)
+import Prelude hiding (concat, takeWhile, take, lookup)
 import Data.Text (Text)
 import Data.Attoparsec.Text
+import Data.Map hiding (map)
 import Control.Applicative (pure, many, (<*), (*>),(<*>),(<|>),(<$>))
 import X12.Separators
 import X12.Tokens.SegmentToken
 import X12.Tokens.ElementToken
+import X12.Definitions.SegmentDef
+import X12.Definitions.SegmentDefs
+import X12.Definitions.ElementUse
 
 type ElementTok = Text
 type SegmentTok = [ElementTok]
@@ -64,4 +68,11 @@ tokenizeSegment seps = do
   segmentID <- element seps
   char (elementSeparator seps)
   elementToks <- segment seps
-  return $ SegmentToken segmentID (map SimpleElementToken elementToks)
+  mSegmentDef <- pure $ lookup segmentID segmentDefs
+  elementTokenConst <- case mSegmentDef of
+    Just (SegmentDef _ _ _ eUses) -> pure $ map elementUseToTokenC eUses
+    Nothing -> pure []
+  return $ SegmentToken segmentID (zipWith ($) elementTokenConst elementToks)
+
+elementUseToTokenC :: ElementUse -> Text -> ElementToken
+elementUseToTokenC _ = SimpleElementToken

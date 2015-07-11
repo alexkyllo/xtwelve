@@ -14,7 +14,27 @@ spec =
     context "Tokenize an ISA segment" $ do
       it "tokenizes testISA into a SegmentToken containing SimpleElementTokens" $ do
         testISA ~> tokenizeISA
-        `shouldParse` (SegmentToken {segmentTokenId = "ISA", elementTokens = [SimpleElementToken "01",SimpleElementToken "0000000000",SimpleElementToken "01",SimpleElementToken "ABCCO     ",SimpleElementToken "12",SimpleElementToken "4405197800     ",SimpleElementToken "01",SimpleElementToken "999999999      ",SimpleElementToken "101127",SimpleElementToken "1719",SimpleElementToken "U",SimpleElementToken "00400",SimpleElementToken "000003438",SimpleElementToken "0",SimpleElementToken "P"]},Separators {componentSeparator = '>', repetitionSeparator = '^', elementSeparator = '*', segmentSeparator = '\n'})
+        `shouldParse` (SegmentToken { segmentTokenId = "ISA"
+                                    , elementTokens = [SimpleElementToken "01"
+                                                      , SimpleElementToken "0000000000"
+                                                      , SimpleElementToken "01"
+                                                      , SimpleElementToken "ABCCO     "
+                                                      , SimpleElementToken "12"
+                                                      , SimpleElementToken "4405197800     "
+                                                      , SimpleElementToken "01"
+                                                      , SimpleElementToken "999999999      "
+                                                      , SimpleElementToken "101127"
+                                                      , SimpleElementToken "1719"
+                                                      , SimpleElementToken "U"
+                                                      , SimpleElementToken "00400"
+                                                      , SimpleElementToken "000003438"
+                                                      , SimpleElementToken "0"
+                                                      , SimpleElementToken "P"]}
+                      , Separators { componentSeparator = '>'
+                                   , repetitionSeparator = '^'
+                                   , elementSeparator = '*'
+                                   , segmentSeparator = '\n'
+                                   })
 
     context "Tokenize a GS segment" $ do
       it "tokenizes testGS to a SegmentToken" $ do
