@@ -10,11 +10,25 @@ main = hspec spec
 
 spec :: Spec
 spec =
-  describe "X12.Tokenizer" $
-    context "Tokenize an ISA segment" $
-      it "tokenizes testISA into a [Text]" $
+  describe "X12.Tokenizer" $ do
+    context "Tokenize an ISA segment" $ do
+      it "tokenizes testISA into a SegmentToken containing SimpleElementTokens" $ do
         testISA ~> tokenizeISA
         `shouldParse` (SegmentToken {segmentTokenId = "ISA", elementTokens = [SimpleElementToken "01",SimpleElementToken "0000000000",SimpleElementToken "01",SimpleElementToken "ABCCO     ",SimpleElementToken "12",SimpleElementToken "4405197800     ",SimpleElementToken "01",SimpleElementToken "999999999      ",SimpleElementToken "101127",SimpleElementToken "1719",SimpleElementToken "U",SimpleElementToken "00400",SimpleElementToken "000003438",SimpleElementToken "0",SimpleElementToken "P"]},Separators {componentSeparator = '>', repetitionSeparator = '^', elementSeparator = '*', segmentSeparator = '\n'})
+
+    context "Tokenize a GS segment" $ do
+      it "tokenizes testGS to a SegmentToken" $ do
+        testGS ~> tokenizeSegment testSeparators
+        `shouldParse` SegmentToken {segmentTokenId = "GS"
+                                    , elementTokens = [ SimpleElementToken "PO"
+                                                      , SimpleElementToken "4405197800"
+                                                      , SimpleElementToken "999999999"
+                                                      , SimpleElementToken "20101127"
+                                                      , SimpleElementToken "1719"
+                                                      , SimpleElementToken "1421"
+                                                      , SimpleElementToken "X"
+                                                      , SimpleElementToken "004010VICS"
+                                                      ]}
 
 
 testInterchange :: Text
@@ -26,5 +40,7 @@ testFail = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><note><to> Tove</to><from>
 testISA :: Text
 testISA = "ISA*01*0000000000*01*ABCCO     *12*4405197800     *01*999999999      *101127*1719*U*00400*000003438*0*P*>\n"
 
-testSegment :: Text
-testSegment = "GS*PO*4405197800*999999999*20101127*1719*1421*X*004010VICS\n"
+testGS :: Text
+testGS = "GS*PO*4405197800*999999999*20101127*1719*1421*X*004010VICS\n"
+
+testSeparators = Separators {componentSeparator = '>', repetitionSeparator = '^', elementSeparator = '*', segmentSeparator = '\n'}

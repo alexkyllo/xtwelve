@@ -42,6 +42,7 @@ parseInterchange = do
   segments <- many $ segment seps <* char (segmentSeparator seps)
   return ((i : isaElements) : segments, seps)
 
+-- | Tokenize the ISA (Interchange header segment) and detect the separators/delimiters being used
 tokenizeISA :: Parser (SegmentToken, Separators)
 tokenizeISA = do
   i <- string "ISA" -- every Interchange starts with the text "ISA"
@@ -57,9 +58,10 @@ tokenizeISA = do
   elementTokens <- pure $ map SimpleElementToken isaElements
   return (SegmentToken "ISA" elementTokens, seps)
 
+-- | Tokenize any other segment after the separators are identified
 tokenizeSegment :: Separators -> Parser SegmentToken
 tokenizeSegment seps = do
-  segmentID <- take 3
+  segmentID <- element seps
   char (elementSeparator seps)
   elementToks <- segment seps
   return $ SegmentToken segmentID (map SimpleElementToken elementToks)

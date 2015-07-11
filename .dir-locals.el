@@ -3,3 +3,5 @@
                   (haskell-process-type . ghci)
                   (haskell-process-path-ghci . "stack")
                   (haskell-process-args-ghci . ("ghci" "--ghc-options" "-XOverloadedStrings")))))
+
+(global-linum-mode 1)

@@ -7,4 +7,4 @@ data Separators = Separators { componentSeparator :: Char
                              , elementSeparator :: Char
                              , segmentSeparator :: Char
                              }
-                  deriving Show
+                  deriving (Eq, Show)
