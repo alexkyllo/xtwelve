@@ -11,9 +11,6 @@ import X12.Definitions.ElementUse
 iea = SegmentDef { segmentId = "IEA"
                  , segmentName = "Interchange Control Trailer"
                  , segmentPurpose = "To define the end of an interchange of zero or more functional groups and interchange-related control segments"
-                 , elementUses = [ ElementUse { elementUseDef = i16
-                                               , elementReq = Mandatory
-                                               , elementRepeatCount = Bounded 1
-                                               }
+                 , elementUses = [ SimpleElementUse i16 Mandatory (Bounded 1)
                                  ]
                  }

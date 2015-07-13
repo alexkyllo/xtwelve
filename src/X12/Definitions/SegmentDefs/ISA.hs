@@ -11,73 +11,22 @@ import X12.Definitions.ElementUse
 isa = SegmentDef { segmentId = "ISA"
                  , segmentName = "Interchange Control Header"
                  , segmentPurpose = "To start and identify an interchange of zero or more functional groups and interchange-related control segments"
-                 , elementUses = [ ElementUse { elementUseDef = i01
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i02
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i03
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i04
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i05
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i06
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i05
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i07
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i08
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i09
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i10
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i01
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i11
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i12
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i13
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i14
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
-                                 , ElementUse { elementUseDef = i15
-                                              , elementReq = Mandatory
-                                              , elementRepeatCount = Bounded 1
-                                              }
+                 , elementUses = [ SimpleElementUse i01 Mandatory (Bounded 1)
+                                 , SimpleElementUse i02 Mandatory (Bounded 1)
+                                 , SimpleElementUse i03 Mandatory (Bounded 1)
+                                 , SimpleElementUse i04 Mandatory (Bounded 1)
+                                 , SimpleElementUse i05 Mandatory (Bounded 1)
+                                 , SimpleElementUse i06 Mandatory (Bounded 1)
+                                 , SimpleElementUse i05 Mandatory (Bounded 1)
+                                 , SimpleElementUse i07 Mandatory (Bounded 1)
+                                 , SimpleElementUse i08 Mandatory (Bounded 1)
+                                 , SimpleElementUse i09 Mandatory (Bounded 1)
+                                 , SimpleElementUse i10 Mandatory (Bounded 1)
+                                 , SimpleElementUse i01 Mandatory (Bounded 1)
+                                 , SimpleElementUse i11 Mandatory (Bounded 1)
+                                 , SimpleElementUse i12 Mandatory (Bounded 1)
+                                 , SimpleElementUse i13 Mandatory (Bounded 1)
+                                 , SimpleElementUse i14 Mandatory (Bounded 1)
+                                 , SimpleElementUse i15 Mandatory (Bounded 1)
                                  ]
                  }

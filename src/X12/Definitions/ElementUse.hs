@@ -5,9 +5,7 @@ import X12.Definitions.ElementDefs (ElementDef(..))
 import X12.Definitions.RepeatCount
 import X12.Definitions.Requirement
 
-
-data ElementUse = ElementUse { elementUseDef :: ElementDef
-                             , elementReq :: Requirement
-                             , elementRepeatCount :: RepeatCount
-                             }
+data ElementUse = SimpleElementUse ElementDef Requirement RepeatCount
+                | ComponentElementUse ElementDef Requirement
+                | CompositeElementUse ElementDef Requirement RepeatCount
                 deriving Show
