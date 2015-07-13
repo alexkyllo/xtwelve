@@ -15,7 +15,7 @@ spec =
       it "tokenizes testISA into a SegmentToken containing SimpleElementTokens" $ do
         testISA ~> tokenizeISA
         `shouldParse` (SegmentToken { segmentTokenId = "ISA"
-                                    , elementTokens = [SimpleElementToken "01"
+                                    , elementTokens = [ SimpleElementToken "01"
                                                       , SimpleElementToken "0000000000"
                                                       , SimpleElementToken "01"
                                                       , SimpleElementToken "ABCCO     "
