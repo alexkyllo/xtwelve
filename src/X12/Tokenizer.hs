@@ -69,12 +69,12 @@ tokenizeSegment seps = do
   char (elementSeparator seps)
   elementToks <- segment seps
   mSegmentDef <- pure $ lookup segmentID segmentDefs
-  elementTokenConst <- case mSegmentDef of
+  elemTokenC <- case mSegmentDef of
     Just (SegmentDef _ _ _ eUses) -> pure $ map elemUseToTok eUses
     Nothing -> pure []
-  return $ SegmentToken segmentID (zipWith ($) elementTokenConst elementToks)
+  return $ SegmentToken segmentID (zipWith ($) elemTokenC elementToks)
 
 elemUseToTok :: ElementUse -> Text -> ElementToken
 elemUseToTok (SimpleElementUse _ _ _) tok = SimpleElementToken tok
 elemUseToTok (ComponentElementUse _ _) tok = ComponentElementToken tok
-elemnUseToTok (CompositeElementUse _ _ _) tok = CompositeElementToken [tok]
+elemUseToTok (CompositeElementUse _ _ _) tok = CompositeElementToken [ComponentElementToken tok]
