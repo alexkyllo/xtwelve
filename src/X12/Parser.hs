@@ -12,7 +12,7 @@ import X12.Definitions.SegmentDefs
 import X12.Definitions.InterchangeDefs
 import Data.Either
 import Data.Map hiding (map)
-import Data.Text (Text, unpack)
+import Data.Text (Text, unpack, append)
 import Data.Attoparsec.Text
 import Data.Time.Calendar (Day(..))
 import Data.Time.LocalTime (TimeOfDay(..))
@@ -23,7 +23,8 @@ import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 readInterchange :: Either String ([SegmentTok], Separators) -> Either String InterchangeVal
 readInterchange (Right (segments, seps)) = case iDef of
                                             (Just def) -> Right $ InterchangeVal def [] seps
-                                            Nothing -> Left $ "Interchange definition not found for version"
-  where iDef = lookup (head segments !! 12) interchangeDict
+                                            Nothing -> Left $ "Interchange definition not found for version" ++ unpack version
+  where iDef = lookup version interchangeDict
+        version = head segments !! 12
 
 readInterchange (Left err) =  error $ "A parsing error was found: " ++ err
