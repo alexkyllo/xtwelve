@@ -13,10 +13,10 @@ data Separators = Separators { componentSeparator :: Char
                   deriving (Eq, Show)
 
 data RepeatCount = Bounded Int | Unbounded
-                 deriving Show
+                 deriving (Eq, Show)
 
 data Requirement = Mandatory | Optional | Relational
-                 deriving Show
+                 deriving (Eq, Show)
 
 data ElementDef =
   ElementDef { elementId :: Text
@@ -27,18 +27,18 @@ data ElementDef =
              , elementPrecision :: Maybe Int -- Decimal precision for N and R values
              , elementCodeList :: Maybe (Map Text Text) -- Code Lists for ID values
              }
-  deriving Show
+  deriving (Eq, Show)
 
 
 data ElementUse = ElementUse ElementDef Requirement RepeatCount
-                deriving Show
+                deriving (Eq, Show)
 
 data SegmentDef = SegmentDef { segmentId :: Text
                              , segmentName :: Text
                              , segmentPurpose :: Text
                              , elementUses :: [ElementUse]
                              }
-                deriving Show
+                deriving (Eq, Show)
 
 
 data SegmentUse = SegmentUse { segmentUseDef :: SegmentDef
@@ -46,13 +46,13 @@ data SegmentUse = SegmentUse { segmentUseDef :: SegmentDef
                              , segmentRepeatCount :: RepeatCount
                              , segmentParent :: Maybe LoopDef
                              }
-                deriving Show
+                deriving (Eq, Show)
 
 data InterchangeDef = InterchangeDef { interchangeDefId :: Text
                                      , interchangeHeaderSegmentUses :: [SegmentUse]
                                      , interchangeTrailerSegmentUses :: [SegmentUse]
                                      }
-                    deriving Show
+                    deriving (Eq, Show)
 
 
 data FunctionalGroupDef = FunctionalGroupDef { functionalGroupDefId :: Text
@@ -69,7 +69,7 @@ data TransactionSetDef = TransactionSetDef { transactionSetDefId :: Text
 
 
 data TableType = Header | Detail | Summary
-               deriving Show
+               deriving (Eq, Show)
 
 data TableDef = TableDef { tableType :: TableType
                          , tableId :: Text
@@ -77,9 +77,9 @@ data TableDef = TableDef { tableType :: TableType
                          , tableTrailerSegmentUses :: [SegmentUse]
                          , tableLoopDefs :: [LoopDef]
                          }
-              deriving Show
+              deriving (Eq, Show)
 
 data LoopDef = LoopDef { loopId :: Text
                        , loopRepeatCount :: RepeatCount
                        }
-             deriving Show
+             deriving (Eq, Show)

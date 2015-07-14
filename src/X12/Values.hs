@@ -8,21 +8,25 @@ data Position = Position { offset :: Int
                           , column :: Int
                         --, pathname :: Text
                          }
+              deriving (Eq, Show)
 
 data ElementVal = ElementVal ElementUse
-                deriving Show
+                deriving (Eq, Show)
 
 
 data SegmentVal = SegmentDef [ElementVal]
-                deriving Show
+                deriving (Eq, Show)
 
 
 data SegmentLoopVal = SegmentVal SegmentDef [ElementVal]
                     | LoopVal LoopDef SegmentLoopVal
-                    deriving Show
+                    deriving (Eq, Show)
 
 data TableVal = TableVal TableDef SegmentLoopVal
-              deriving Show
+              deriving (Eq, Show)
 
 data InterchangeVal = InterchangeVal InterchangeDef [SegmentVal] Separators
-                    deriving Show
+                    deriving (Eq, Show)
+
+data TransmissionVal = TransmissionVal [InterchangeVal]
+                     deriving (Eq, Show)

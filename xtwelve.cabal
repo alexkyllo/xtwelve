@@ -19,8 +19,7 @@ library
   exposed-modules: X12.Parser
                  , X12.Parser.Value
                  , X12.Tokenizer
-                 , X12.Tokens.SegmentToken
-                 , X12.Tokens.ElementToken
+                 , X12.Tokens
                  , X12.Definitions
                  , X12.Values
   other-modules: X12.Definitions.SegmentDefs

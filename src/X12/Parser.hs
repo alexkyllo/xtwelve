@@ -4,7 +4,7 @@ module X12.Parser where
 import Prelude hiding (concat, takeWhile, take, lookup)
 import X12.Parser.Value
 import X12.Tokenizer
-import X12.Tokens.SegmentToken
+import X12.Tokens
 import X12.Values
 import X12.Definitions
 import X12.Definitions.ElementDefs
