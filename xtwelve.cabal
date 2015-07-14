@@ -24,6 +24,7 @@ library
                  , X12.Values
   other-modules: X12.Definitions.SegmentDefs
                , X12.Definitions.ElementDefs
+               , X12.Definitions.InterchangeDefs
   -- other-extensions:
   build-depends:       base >= 4 && < 5
                      , attoparsec

@@ -9,6 +9,7 @@ import X12.Values
 import X12.Definitions
 import X12.Definitions.ElementDefs
 import X12.Definitions.SegmentDefs
+import X12.Definitions.InterchangeDefs
 import Data.Either
 import Data.Map hiding (map)
 import Data.Text (Text, unpack)
@@ -21,17 +22,17 @@ import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 readInterchange :: Either String ([SegmentTok], Separators) -> InterchangeVal
 readInterchange (Right (segments, seps)) = InterchangeVal iDef [] seps
   where iDef = InterchangeDef { interchangeDefId = head segments !! 12
-                                        , interchangeHeaderSegmentUses = [SegmentUse { segmentUseDef = isa
-                                                                          , segmentReq = Mandatory
-                                                                          , segmentRepeatCount = Bounded 1
-                                                                          , segmentParent = Nothing
-                                                                          }
-                                                              ]
-                                        , interchangeTrailerSegmentUses = [ SegmentUse { segmentUseDef = iea
+                              , interchangeHeaderSegmentUses = [ SegmentUse { segmentUseDef = isa
                                                                             , segmentReq = Mandatory
                                                                             , segmentRepeatCount = Bounded 1
                                                                             , segmentParent = Nothing
                                                                             }
                                                                ]
+                              , interchangeTrailerSegmentUses = [ SegmentUse { segmentUseDef = iea
+                                                                             , segmentReq = Mandatory
+                                                                             , segmentRepeatCount = Bounded 1
+                                                                             , segmentParent = Nothing
+                                                                             }
+                                                                ]
                                         }
 readInterchange (Left err) =  error $ "A parsing error was found: " ++ err

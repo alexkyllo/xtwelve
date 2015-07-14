@@ -1,11 +1,12 @@
 -- |
 
-module X12.Definitions.InterchangeDefs.FourOhOne where
+module X12.Definitions.InterchangeDefs where
 import X12.Definitions
-import X12.Definitions.SegmentDefs.ISA
-import X12.Definitions.SegmentDefs.IEA
+import X12.Definitions.SegmentDefs
+import Data.Map hiding (Map)
+import Data.Text
 
-fourOhOne = InterchangeDef { interchangeDefId = "00401"
+i00401 = InterchangeDef { interchangeDefId = "00401"
                            , interchangeHeaderSegmentUses = [isaUse]
                            , interchangeTrailerSegmentUses = [ieaUse]
                            }
@@ -17,3 +18,10 @@ isaUse = SegmentUse { segmentUseDef = isa
                     }
 
 ieaUse = SegmentUse iea Mandatory (Bounded 1) Nothing
+
+
+segmentDict = fromList [("ISA" :: Text, isa)
+                       , ("IEA" :: Text, iea)
+                       ]
+
+interchangeDict = fromList [("00401", i00401)]
