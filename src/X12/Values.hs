@@ -25,6 +25,11 @@ data SegmentLoopVal = SegmentVal SegmentDef [ElementVal]
 data TableVal = TableVal TableDef SegmentLoopVal
               deriving (Eq, Show)
 
+data TransactionSetVal = TransactionSetVal TransactionSetDef [TableVal]
+
+-- | A Functional Group value consisting of a definition, header Segments, transaction sets, and trailer segments
+data FunctionalGroupVal = FunctionalGroupVal FunctionalGroupDef [SegmentVal] [TransactionSetVal] [SegmentVal]
+
 data InterchangeVal = InterchangeVal InterchangeDef [SegmentVal] Separators
                     deriving (Eq, Show)
 
