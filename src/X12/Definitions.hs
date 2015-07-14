@@ -30,9 +30,7 @@ data ElementDef =
   deriving Show
 
 
-data ElementUse = SimpleElementUse ElementDef Requirement RepeatCount
-                | ComponentElementUse ElementDef Requirement
-                | CompositeElementUse ElementDef Requirement RepeatCount
+data ElementUse = ElementUse ElementDef Requirement RepeatCount
                 deriving Show
 
 data SegmentDef = SegmentDef { segmentId :: Text

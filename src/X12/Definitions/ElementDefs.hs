@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 -- |
 
 module X12.Definitions.ElementDefs where
@@ -7,6 +6,43 @@ import Data.Map hiding (map)
 import Data.Text
 import X12.Parser.Value
 
+e28 = ElementDef "E28" "Group Control Number" "N" 1 9 (Just 0) Nothing
+
+e97 = ElementDef "E97" "Number of Transaction Sets Included" "N" 1 6 (Just 0) Nothing
+
+e98 = ElementDef "E98" "Entity Identifier Code" "ID" 2 3 Nothing (Just e98Codes)
+
+e98Codes = fromList [("BY","Buying Party (Purchaser)")
+                    ]
+
+e124 = ElementDef "E124" "Aplication's Receiver Code" "ID" 2 15 Nothing Nothing
+
+e142 = ElementDef "E142" "Application's Sender Code" "ID" 2 15 Nothing Nothing
+
+e143 = ElementDef "E143" "Transaction Set Identifier Number" "ID" 3 3 Nothing (Just e143Codes)
+
+e143Codes = fromList [ ("850","Purchase Order")
+                        , ("855","Purchase Order Acknowledgment")
+                        , ("856","Ship Notice/Manifest")
+                        , ("860","Purchase Order Change Request - Buyer Initiated")
+                        ]
+
+e329 = ElementDef "E329" "Transaction Set Control Number" "ID" 4 9 Nothing Nothing
+
+e337 = ElementDef "E337" "Time" "TM" 4 4 Nothing Nothing
+
+e353 = ElementDef "E353" "Transaction Set Purpose Code" "ID" 2 2 Nothing (Just e353Codes)
+
+e353Codes = fromList [ ("00" , "Original")
+                     , ("01" , "Cancellation")
+                     , ("04" , "Change")
+                     , ("05" , "Replace")
+                     ]
+
+e373 = ElementDef "E373" "Date" "DT" 8 8 Nothing Nothing
+
+e455 = ElementDef "E455" "Responsible Agency Code" "ID" 1 2 Nothing Nothing
+
 e479 = ElementDef "E479" "Functional Identifier Code" "ID" 2 2 Nothing (Just e479CodeList)
 
 e479CodeList = fromList [ ( "PO"
@@ -14,35 +50,11 @@ e479CodeList = fromList [ ( "PO"
                           )
                         ]
 
-e142 = ElementDef "E142" "Application's Sender Code" "ID" 2 15 Nothing Nothing
-
-e124 = ElementDef "E124" "Aplication's Receiver Code" "ID" 2 15 Nothing Nothing
-
-e373 = ElementDef "E373" "Date" "DT" 8 8 Nothing Nothing
-
-e337 = ElementDef "E337" "Time" "TM" 4 4 Nothing Nothing
-
-e28 = ElementDef "E28" "Group Control Number" "N" 1 9 (Just 0) Nothing
-
-e455 = ElementDef "E455" "Responsible Agency Code" "ID" 1 2 Nothing Nothing
-
 e480 = ElementDef "E480" "Version / Release / Identifier Code" "AN" 1 12 Nothing (Just e480CodeList)
 
 e480CodeList = fromList [ ("004010X091","Draft Standards Approved for Publication by ASC X12 Procedures Review Board through October 1997")
                         , ("004010VICS","Voluntary Industry Commerce Standards v 004010")
                         ]
-
-e97 = ElementDef "E97" "Number of Transaction Sets Included" "N" 1 6 (Just 0) Nothing
-
-e143 = ElementDef "E143" "Transaction Set Identifier Number" "ID" 3 3 Nothing (Just e143CodeList)
-
-e143CodeList = fromList [ ("850","Purchase Order")
-                        , ("855","Purchase Order Acknowledgment")
-                        , ("856","Ship Notice/Manifest")
-                        , ("860","Purchase Order Change Request - Buyer Initiated")
-                        ]
-
-e329 = ElementDef "E329" "Transaction Set Control Number" "ID" 4 9 Nothing Nothing
 
 i01 = ElementDef { elementId = "I01"
                  , elementName = "Authorization Information Qualifier"
@@ -68,8 +80,8 @@ i03 = ElementDef { elementId = "I03"
                  , elementMinLength = 2
                  , elementMaxLength = 2
                  , elementPrecision = Nothing
-                 , elementCodeList = Just $ fromList ([("00", "No Security Information Present (No Meaningful Information in I04)")
-                                                      , ("01", "Password")])
+                 , elementCodeList = Just $ fromList [("00", "No Security Information Present (No Meaningful Information in I04)")
+                                                      , ("01", "Password")]
                  }
 
 i04 = ElementDef { elementId = "I04"
@@ -87,10 +99,10 @@ i05 = ElementDef { elementId = "I05"
                  , elementMinLength = 2
                  , elementMaxLength = 2
                  , elementPrecision = Nothing
-                 , elementCodeList = Just $ fromList ([("01","Duns (Dun & Bradstreet)")
+                 , elementCodeList = Just $ fromList [("01","Duns (Dun & Bradstreet)")
                                                       , ("02","SCAC (Standard Carrier Alpha Code)")
                                                       , ("ZZ", "Mutually Defined")
-                                                      ])
+                                                      ]
                  }
 
 i06 = ElementDef { elementId = "I06"

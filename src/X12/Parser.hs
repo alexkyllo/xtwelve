@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 -- | Parser for ANSI X12 EDI Data Format
 
 module X12.Parser where
