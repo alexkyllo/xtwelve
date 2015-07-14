@@ -9,8 +9,7 @@ import X12.Tokens.SegmentToken
 import X12.Values
 import X12.Definitions
 import X12.Definitions.ElementDefs
-import qualified X12.Definitions.SegmentDefs.ISA
-import qualified X12.Definitions.SegmentDefs.IEA
+import X12.Definitions.SegmentDefs
 import Data.Either
 import Data.Map hiding (map)
 import Data.Text (Text, unpack)
@@ -23,13 +22,13 @@ import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 readInterchange :: Either String ([SegmentTok], Separators) -> InterchangeVal
 readInterchange (Right (segments, seps)) = InterchangeVal iDef [] seps
   where iDef = InterchangeDef { interchangeDefId = head segments !! 12
-                                        , interchangeHeaderSegmentUses = [SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.ISA.isa
+                                        , interchangeHeaderSegmentUses = [SegmentUse { segmentUseDef = isa
                                                                           , segmentReq = Mandatory
                                                                           , segmentRepeatCount = Bounded 1
                                                                           , segmentParent = Nothing
                                                                           }
                                                               ]
-                                        , interchangeTrailerSegmentUses = [ SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.IEA.iea
+                                        , interchangeTrailerSegmentUses = [ SegmentUse { segmentUseDef = iea
                                                                             , segmentReq = Mandatory
                                                                             , segmentRepeatCount = Bounded 1
                                                                             , segmentParent = Nothing
