@@ -11,6 +11,7 @@
 7. Parse one or more Transaction Sets. Read the ST01 to determine what Transaction Set is being used (e.g. 850, 856, 315, 214) and look up that TransactionSetDef to find its TableDefs and their LoopDefs and SegmentUses (and their ElementUses).
 8. For each element, use the datatype parsers to construct an ElementVal with a Value of one of the ANSI data types (ID, AN, DT, TM, N, R)
 8. Based on the InterchangeDefConstruct a tree with this hierarchy:
+
 -TransmissionVal
   -InterchangeVal (1+)
     -SegmentVal (ISA)
