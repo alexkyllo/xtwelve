@@ -17,22 +17,13 @@ import Data.Attoparsec.Text
 import Data.Time.Calendar (Day(..))
 import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Scientific (Scientific)
+
 import Control.Applicative (pure, many, (<*),(*>),(<*>),(<|>),(<$>))
 
-readInterchange :: Either String ([SegmentTok], Separators) -> InterchangeVal
-readInterchange (Right (segments, seps)) = InterchangeVal iDef [] seps
-  where iDef = InterchangeDef { interchangeDefId = head segments !! 12
-                              , interchangeHeaderSegmentUses = [ SegmentUse { segmentUseDef = isa
-                                                                            , segmentReq = Mandatory
-                                                                            , segmentRepeatCount = Bounded 1
-                                                                            , segmentParent = Nothing
-                                                                            }
-                                                               ]
-                              , interchangeTrailerSegmentUses = [ SegmentUse { segmentUseDef = iea
-                                                                             , segmentReq = Mandatory
-                                                                             , segmentRepeatCount = Bounded 1
-                                                                             , segmentParent = Nothing
-                                                                             }
-                                                                ]
-                                        }
+readInterchange :: Either String ([SegmentTok], Separators) -> Either String InterchangeVal
+readInterchange (Right (segments, seps)) = case iDef of
+                                            (Just def) -> Right $ InterchangeVal def [] seps
+                                            Nothing -> Left $ "Interchange definition not found for version"
+  where iDef = lookup (head segments !! 12) interchangeDict
+
 readInterchange (Left err) =  error $ "A parsing error was found: " ++ err

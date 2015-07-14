@@ -7,21 +7,18 @@ import Data.Map hiding (Map)
 import Data.Text
 
 i00401 = InterchangeDef { interchangeDefId = "00401"
-                           , interchangeHeaderSegmentUses = [isaUse]
-                           , interchangeTrailerSegmentUses = [ieaUse]
-                           }
+                        , interchangeHeaderSegmentUses = [isaUse]
+                        , interchangeTrailerSegmentUses = [ieaUse]
+                        }
 
-isaUse = SegmentUse { segmentUseDef = isa
-                    , segmentReq = Mandatory
-                    , segmentRepeatCount = Bounded 1
-                    , segmentParent = Nothing
-                    }
+isaUse = SegmentUse isa Mandatory (Bounded 1) Nothing
 
 ieaUse = SegmentUse iea Mandatory (Bounded 1) Nothing
 
 
-segmentDict = fromList [("ISA" :: Text, isa)
+segmentDict = fromList [ ("ISA" :: Text, isa)
                        , ("IEA" :: Text, iea)
                        ]
 
-interchangeDict = fromList [("00401", i00401)]
+interchangeDict = fromList [ ("00401" :: Text, i00401)
+                           ]
