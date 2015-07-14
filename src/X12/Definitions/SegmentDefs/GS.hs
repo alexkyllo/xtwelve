@@ -1,11 +1,8 @@
 -- |
 
 module X12.Definitions.SegmentDefs.GS where
-import X12.Definitions.SegmentDef
+import X12.Definitions
 import X12.Definitions.ElementDefs
-import X12.Definitions.Requirement
-import X12.Definitions.RepeatCount
-import X12.Definitions.ElementUse
 
 gs = SegmentDef { segmentId = "GS"
                 , segmentName = "Functional Group Header"

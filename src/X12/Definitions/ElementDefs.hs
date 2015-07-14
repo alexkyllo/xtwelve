@@ -2,20 +2,10 @@
 -- |
 
 module X12.Definitions.ElementDefs where
+import X12.Definitions
 import Data.Map hiding (map)
 import Data.Text
 import X12.Parser.Value
-
-data ElementDef =
-  ElementDef { elementId :: Text
-             , elementName :: Text
-             , elementType :: Text
-             , elementMinLength :: Int
-             , elementMaxLength :: Int
-             , elementPrecision :: Maybe Int -- Decimal precision for N and R values
-             , elementCodeList :: Maybe (Map Text Text) -- Code Lists for ID values
-             }
-  deriving Show
 
 e479 = ElementDef "E479" "Functional Identifier Code" "ID" 2 2 Nothing (Just e479CodeList)
 

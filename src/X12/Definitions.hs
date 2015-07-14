@@ -5,6 +5,13 @@ module X12.Definitions where
 import Data.Text
 import Data.Map
 
+data Separators = Separators { componentSeparator :: Char
+                             , repetitionSeparator :: Char
+                             , elementSeparator :: Char
+                             , segmentSeparator :: Char
+                             }
+                  deriving (Eq, Show)
+
 data RepeatCount = Bounded Int | Unbounded
                  deriving Show
 
@@ -50,6 +57,12 @@ data InterchangeDef = InterchangeDef { interchangeDefId :: Text
                     deriving Show
 
 
+data FunctionalGroupDef = FunctionalGroupDef { functionalGroupDefId :: Text
+                                             , functionalGroupHeaderSegmentUses :: [SegmentUse]
+                                             , functionalGroupTrailerSegmentUses :: [SegmentUse]
+                                             }
+
+
 data TransactionSetDef = TransactionSetDef { transactionSetDefId :: Text
                                            , transactionSetName :: Text
                                            , transactionSetFunctionalGroup :: Text
@@ -58,6 +71,7 @@ data TransactionSetDef = TransactionSetDef { transactionSetDefId :: Text
 
 
 data TableType = Header | Detail | Summary
+               deriving Show
 
 data TableDef = TableDef { tableType :: TableType
                          , tableId :: Text
@@ -65,6 +79,7 @@ data TableDef = TableDef { tableType :: TableType
                          , tableTrailerSegmentUses :: [SegmentUse]
                          , tableLoopDefs :: [LoopDef]
                          }
+              deriving Show
 
 data LoopDef = LoopDef { loopId :: Text
                        , loopRepeatCount :: RepeatCount

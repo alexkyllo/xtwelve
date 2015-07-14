@@ -8,12 +8,10 @@ import Data.Text (Text)
 import Data.Attoparsec.Text
 import Data.Map hiding (map)
 import Control.Applicative (pure, many, (<*), (*>),(<*>),(<|>),(<$>))
-import X12.Separators
 import X12.Tokens.SegmentToken
 import X12.Tokens.ElementToken
-import X12.Definitions.SegmentDef
+import X12.Definitions
 import X12.Definitions.SegmentDefs
-import X12.Definitions.ElementUse
 
 type ElementTok = Text
 type SegmentTok = [ElementTok]

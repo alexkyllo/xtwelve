@@ -1,12 +1,9 @@
 -- |
 
 module X12.Definitions.SegmentDefs where
-import X12.Definitions.SegmentDef
-import X12.Definitions.SegmentDefs.GS
-import X12.Definitions.ElementUse
+import X12.Definitions
 import X12.Definitions.ElementDefs
-import X12.Definitions.Requirement
-import X12.Definitions.RepeatCount
+import X12.Definitions.SegmentDefs.GS
 import Data.Map hiding (map)
 import Data.Text
 
@@ -17,5 +14,4 @@ st = SegmentDef "ST" "Transaction Set Header" "To indicate the start of a transa
                                                                                                                        , SimpleElementUse e329 Mandatory (Bounded 1)
                                                                                                                        ]
 
-beg = SegmentDef "BEG" "Beginning Segment for Purchase Order" "To indicate the beginning of the Purchase Order Transaction Set and transmit identifying numbers and dates" [
-                                                                                                                                                                           ]
+beg = SegmentDef "BEG" "Beginning Segment for Purchase Order" "To indicate the beginning of the Purchase Order Transaction Set and transmit identifying numbers and dates" []

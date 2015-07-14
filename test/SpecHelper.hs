@@ -11,7 +11,7 @@ module SpecHelper
        , module Data.Time.LocalTime
        , module X12.Tokens.SegmentToken
        , module X12.Tokens.ElementToken
-       , module X12.Separators
+       , module X12.Definitions
        )
      where
 
@@ -24,4 +24,4 @@ import Data.Time.Calendar (fromGregorian)
 import Data.Time.LocalTime (TimeOfDay(..))
 import X12.Tokens.SegmentToken
 import X12.Tokens.ElementToken
-import X12.Separators
+import X12.Definitions
