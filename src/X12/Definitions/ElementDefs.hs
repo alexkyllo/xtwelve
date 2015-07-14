@@ -42,6 +42,8 @@ e480CodeList = fromList [ ("004010X091","Draft Standards Approved for Publicatio
                         , ("004010VICS","Voluntary Industry Commerce Standards v 004010")
                         ]
 
+e97 = ElementDef "E97" "Number of Transaction Sets Included" "N" 1 6 (Just 0) Nothing
+
 i01 = ElementDef { elementId = "I01"
                  , elementName = "Authorization Information Qualifier"
                  , elementType = "ID"

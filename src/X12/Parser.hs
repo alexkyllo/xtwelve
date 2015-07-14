@@ -106,13 +106,13 @@ readInterchange (Right (segments, seps)) = InterchangeVal { interchangeDef = iDe
                                                          , separators = seps
                                                          }
   where iDef = InterchangeDef { interchangeDefId = head segments !! 12
-                                        , headerSegmentUses = [SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.ISA.isa
+                                        , interchangeHeaderSegmentUses = [SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.ISA.isa
                                                                           , segmentReq = Mandatory
                                                                           , segmentRepeatCount = Bounded 1
                                                                           , segmentParent = Nothing
                                                                           }
                                                               ]
-                                        , trailerSegmentUses = [ SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.IEA.iea
+                                        , interchangeTrailerSegmentUses = [ SegmentUse { segmentUseDef = X12.Definitions.SegmentDefs.IEA.iea
                                                                             , segmentReq = Mandatory
                                                                             , segmentRepeatCount = Bounded 1
                                                                             , segmentParent = Nothing

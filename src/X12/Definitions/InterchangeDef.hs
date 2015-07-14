@@ -5,7 +5,7 @@ import Data.Text
 import X12.Definitions.SegmentUse
 
 data InterchangeDef = InterchangeDef { interchangeDefId :: Text
-                                     , headerSegmentUses :: [SegmentUse]
-                                     , trailerSegmentUses :: [SegmentUse]
+                                     , interchangeHeaderSegmentUses :: [SegmentUse]
+                                     , interchangeTrailerSegmentUses :: [SegmentUse]
                                      }
                     deriving Show

@@ -75,6 +75,4 @@ tokenizeSegment seps = do
   return $ SegmentToken segmentID (zipWith ($) elemTokenC elementToks)
 
 elemUseToTok :: ElementUse -> Text -> ElementToken
-elemUseToTok (SimpleElementUse _ _ _) tok = SimpleElementToken tok
-elemUseToTok (ComponentElementUse _ _) tok = ComponentElementToken tok
-elemUseToTok (CompositeElementUse _ _ _) tok = CompositeElementToken [ComponentElementToken tok]
+elemUseToTok _ = SimpleElementToken
