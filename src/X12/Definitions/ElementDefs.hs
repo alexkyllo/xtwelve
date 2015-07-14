@@ -44,6 +44,16 @@ e480CodeList = fromList [ ("004010X091","Draft Standards Approved for Publicatio
 
 e97 = ElementDef "E97" "Number of Transaction Sets Included" "N" 1 6 (Just 0) Nothing
 
+e143 = ElementDef "E143" "Transaction Set Identifier Number" "ID" 3 3 Nothing (Just e143CodeList)
+
+e143CodeList = fromList [ ("850","Purchase Order")
+                        , ("855","Purchase Order Acknowledgment")
+                        , ("856","Ship Notice/Manifest")
+                        , ("860","Purchase Order Change Request - Buyer Initiated")
+                        ]
+
+e329 = ElementDef "E329" "Transaction Set Control Number" "ID" 4 9 Nothing Nothing
+
 i01 = ElementDef { elementId = "I01"
                  , elementName = "Authorization Information Qualifier"
                  , elementType = "ID"

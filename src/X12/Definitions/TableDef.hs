@@ -5,9 +5,11 @@ import Data.Text
 import X12.Definitions.SegmentUse
 import X12.Definitions.LoopDef
 
-data TableDef = TableDef { tableId :: Text
+data TableType = Header | Detail | Summary
+
+data TableDef = TableDef { tableType :: TableType
+                         , tableId :: Text
                          , tableHeaderSegmentUses :: [SegmentUse]
                          , tableTrailerSegmentUses :: [SegmentUse]
                          , tableLoopDefs :: [LoopDef]
-                         , position :: Int
                          }
