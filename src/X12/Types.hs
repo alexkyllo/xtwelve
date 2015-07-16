@@ -9,6 +9,10 @@ import Data.Text
 data ID
 data AN
 data DT
+data ISA
+
+data SegmentValue t where
+  ISA :: (Value ID) -> (Value AN) -> SegmentValue ISA
 
 data Value t where
   ID :: Text -> Value ID
@@ -19,6 +23,6 @@ data I01 = I01 (Value ID)
 
 data I02 = I02 (Value AN)
 
-data ISA = ISA I01 I02
+--data ISA = ISA I01 I02
 
 data IEA = IEA (Value ID)
