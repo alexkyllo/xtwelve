@@ -27,8 +27,8 @@ segment :: Separators -> Parser SegmentTok
 segment seps = sepBy (element seps) $ char (elementSeparator seps)
 
 -- | Read an interchange, parsing the ISA segment first to determine what separators are used
-parseInterchange :: Parser ([SegmentTok], Separators)
-parseInterchange = do
+tokInterchange :: Parser ([SegmentTok], Separators)
+tokInterchange = do
   i <- string "ISA" -- every Interchange starts with the text "ISA"
   elementSep <- anyChar -- followed by any single character, which will be the element separator
   isaElements <- count 15 $ element1 elementSep <* char elementSep -- parse the next 15 element tokens
@@ -41,6 +41,23 @@ parseInterchange = do
                           }
   segments <- many $ segment seps <* char (segmentSeparator seps)
   return ((i : isaElements) : segments, seps)
+
+-- | Read an interchange, parsing the ISA segment first to determine what separators are used
+tokenizeInterchange :: Parser ([SegmentToken], Separators)
+tokenizeInterchange = do
+  i <- string "ISA" -- every Interchange starts with the text "ISA"
+  elementSep <- anyChar -- followed by any single character, which will be the element separator
+  isaElements <- count 15 $ element1 elementSep <* char elementSep -- parse the next 15 element tokens
+  componentSep <- anyChar -- ISA16 is the component separator
+  segmentSep <- anyChar -- the next character is the segment separator
+  seps <- pure Separators { componentSeparator = componentSep
+                          , repetitionSeparator = '\\'
+                          , elementSeparator = elementSep
+                          , segmentSeparator = segmentSep
+                          }
+  isaToken <- pure (SegmentToken "ISA" ((SimpleElementToken "ISA") : (map SimpleElementToken isaElements)))
+  segmentTokens <- many $ tokenizeSegment seps
+  return (isaToken : segmentTokens, seps)
 
 -- | Tokenize the ISA (Interchange header segment) and detect the separators/delimiters being used
 tokenizeISA :: Parser (SegmentToken, Separators)

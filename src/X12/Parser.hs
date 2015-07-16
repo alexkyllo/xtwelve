@@ -28,3 +28,13 @@ readInterchange (Right (segments, seps)) = case iDef of
         version = head segments !! 12
 
 readInterchange (Left err) =  error $ "A parsing error was found: " ++ err
+
+parseInterchange :: Either String ([SegmentToken], Separators) -> Either String InterchangeVal
+parseInterchange (Right (segments, seps)) = case iDef of
+                                            (Just def) -> Right $ InterchangeVal def [] seps
+                                            Nothing -> Left $ "Interchange definition not found for version" ++ unpack version
+  where iDef = lookup version interchangeDict
+        version = case (elementTokens (head segments) !! 12) of (SimpleElementToken txt) -> txt
+                                                                _ -> error "ISA12 must be a Simple Element"
+
+parseInterchange (Left err) =  error $ "A parsing error was found: " ++ err
