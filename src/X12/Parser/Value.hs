@@ -28,6 +28,11 @@ value valtype = case valtype of
   "ID" -> ID <$> (takeText)
   otherwise -> AN <$> (takeText)
 
+pDT :: Text -> Either String Value
+pDT txt = case parseOnly (dayParser8 <|> dayParser6) txt of
+  Right date -> Right $ DT date
+  Left err -> Left err
+
 parseDT :: Parser Value
 parseDT = DT <$> (dayParser8 <|> dayParser6)
 
