@@ -3,10 +3,14 @@
 module X12.Builder where
 
 import X12.Parser.Value
+import X12.Values
 import Data.Text (Text(..), pack)
 import Data.Time.Calendar (Day(..), fromGregorian)
 import Data.Time.LocalTime (TimeOfDay(..))
 import Data.Time.Format
+
+build :: [[Value]] -> InterchangeVal
+build (seg:segs) = undefined
 
 isa :: Text -> Text -> Text -> Text -> Text -> Text -> Text -> Text -> Day ->
        TimeOfDay -> Text -> Text -> Integer -> Text -> Text -> [Value]
